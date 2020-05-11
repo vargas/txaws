@@ -1,7 +1,7 @@
 # Licenced under the txaws licence available at /LICENSE in the txaws source.
 
 import os
-import urlparse
+from urllib.parse import urlparse
 from urllib import quote
 from datetime import datetime
 from io import BytesIO
@@ -602,7 +602,7 @@ def _get_agent(scheme, host, reactor, contextFactory=None):
     if scheme == b"https":
         proxy_endpoint = os.environ.get("https_proxy")
         if proxy_endpoint:
-            proxy_url = urlparse.urlparse(proxy_endpoint)
+            proxy_url = urlparse(proxy_endpoint)
             endpoint = TCP4ClientEndpoint(reactor, proxy_url.hostname, proxy_url.port)
             return ProxyAgent(endpoint)
         else:
@@ -612,7 +612,7 @@ def _get_agent(scheme, host, reactor, contextFactory=None):
     else:
         proxy_endpoint = os.environ.get("http_proxy")
         if proxy_endpoint:
-            proxy_url = urlparse.urlparse(proxy_endpoint)
+            proxy_url = urlparse(proxy_endpoint)
             endpoint = TCP4ClientEndpoint(reactor, proxy_url.hostname, proxy_url.port)
             return ProxyAgent(endpoint)
         else:

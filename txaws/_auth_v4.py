@@ -4,8 +4,7 @@ AWS authorization, version 4.
 """
 import hashlib
 import hmac
-import urllib
-import urlparse
+from urllib.parse import urlparse, parse_qs, urlunparse, urlencode, quote
 
 import attr
 
@@ -94,10 +93,10 @@ def _make_canonical_uri(parsed):
     @return: The canonical URI.
     @rtype: L{str}
     """
-    path = urllib.quote(parsed.path)
+    path = quote(parsed.path)
     canonical_parsed = parsed._replace(path=path,
                                        params='', query='', fragment='')
-    return urlparse.urlunparse(canonical_parsed)
+    return urlunparse(canonical_parsed)
 
 
 def _make_canonical_query_string(parsed):
@@ -111,11 +110,11 @@ def _make_canonical_query_string(parsed):
     @return: The canonical query string.
     @rtype: L{str}
     """
-    query_params = urlparse.parse_qs(parsed.query, keep_blank_values=True)
+    query_params = parse_qs(parsed.query, keep_blank_values=True)
     sorted_query_params = sorted((k, v)
                                  for k, vs in query_params.items()
                                  for v in vs)
-    return urllib.urlencode(sorted_query_params)
+    return urlencode(sorted_query_params)
 
 
 def _make_canonical_headers(headers, headers_to_sign):
@@ -236,7 +235,7 @@ class _CanonicalRequest(object):
             I{x-amz-content-sha256} header set to
             C{b"UNSIGNED-PAYLOAD"}.
         """
-        parsed = urlparse.urlparse(url)
+        parsed = urlparse(url)
         if payload_hash is None:
             # This magic string tells AWS to disregard the payload for
             # purposes of signing.  The x-amz-content-sha256 header

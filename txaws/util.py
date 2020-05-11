@@ -7,7 +7,7 @@ services.
 from base64 import b64encode
 from hashlib import sha1, md5, sha256
 import hmac
-from urlparse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse
 import time
 
 # Import XMLTreeBuilder from somewhere; here in one place to prevent
