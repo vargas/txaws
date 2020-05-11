@@ -31,7 +31,7 @@ jobs:
     - name: Lint
       run: |
         pip install pylint
-        pylint -rn --errors-only ./smpp 
+        pylint -rn --errors-only ./txaws 
     - name: Test
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
