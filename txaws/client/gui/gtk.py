@@ -2,8 +2,6 @@
 # Licenced under the txaws licence available at /LICENSE in the txaws source.
 """A GTK client for working with aws."""
 
-from __future__ import absolute_import
-
 import gnomekeyring
 import gobject
 import gtk

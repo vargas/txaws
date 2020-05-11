@@ -26,7 +26,7 @@ class APIError(Exception):
 
     def __str__(self):
         # This avoids an exception when twisted logger logs the message, as it
-        # currently doesn't support unicode.
+        # currently doesn't support str.
         if self.message is not None:
             return self.message.encode("ascii", "replace")
         return ""

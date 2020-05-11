@@ -196,7 +196,7 @@ class S3Client(BaseClient):
         Get a list of all the objects in a bucket.
 
         @param bucket: The name of the bucket from which to retrieve objects.
-        @type bucket: L{unicode}
+        @type bucket: L{str}
 
         @param marker: If given, indicate a position in the overall
             results where the results of this call should begin.  The
@@ -430,7 +430,7 @@ class S3Client(BaseClient):
 
         @param bucket: The name of the bucket.
         @param object_name: The name of the object.
-        @type object_name: L{unicode}
+        @type object_name: L{str}
         @param data: The data to write.
         @param content_type: The type of data being written.
         @param metadata: A C{dict} used to build C{x-amz-meta-*} headers.
@@ -831,11 +831,11 @@ def s3_url_context(service_endpoint, bucket=None, object_name=None):
     @type service_endpoint: L{AWSServiceEndpoint}
 
     @param bucket: If given, the name of a bucket to reference.
-    @type bucket: L{unicode}
+    @type bucket: L{str}
 
     @param object_name: If given, the name of an object or object
         subresource to reference.
-    @type object_name: L{unicode}
+    @type object_name: L{str}
     """
 
     # Define our own query parser which can handle the consequences of

@@ -80,7 +80,7 @@ class Route53ClientState(object):
         """
         Assign and return a new, unique hosted zone identifier.
 
-        @rtype: L{unicode}
+        @rtype: L{str}
         """
         return u"/hostedzone/{:014d}".format(next(self._id))
 
@@ -90,7 +90,7 @@ class Route53ClientState(object):
         Retrieve all the rrsets that belong to the given zone.
 
         @param zone_id: The zone to inspect.
-        @type zone_id: L{unicode}
+        @type zone_id: L{str}
 
         @return: L{None} if the zone is not found.  Otherwise, a L{PMap}
             mapping L{RRSetKey} to L{RRSet}.
@@ -106,7 +106,7 @@ class Route53ClientState(object):
         Specify all the rrsets that belong to the given zone.
 
         @param zone_id: The zone to modify.
-        @type zone_id: L{unicode}
+        @type zone_id: L{str}
 
         @param rrsets: A L{PMap} mapping L{RRSetKey} to L{RRSet}.
         """
@@ -259,9 +259,9 @@ def _reverse_dns_labels(name):
     Helper to sort L{Name} instances according to the AWS Route53 rules.
 
     @type name: L{Name}
-    @rtype: L{unicode}
+    @rtype: L{str}
     """
-    return u"".join(unicode(name).split(u".")[-2::-1]) + u"."
+    return u"".join(str(name).split(u".")[-2::-1]) + u"."
 
 
 def _process_change(rrsets, change):

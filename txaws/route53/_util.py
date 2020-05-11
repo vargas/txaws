@@ -5,15 +5,15 @@ Assorted helper functionality for the Route53 implementation.
 """
 
 __all__ = [
-    "maybe_bytes_to_unicode", "to_xml", "tags",
+    "bytes_to_str", "to_xml", "tags",
 ]
 
 from twisted.internet.defer import succeed
 from twisted.web.template import Tag, flattenString
 
-def maybe_bytes_to_unicode(bytes_or_text):
+def bytes_to_str(bytes_or_text):
     """
-    Take a byte string in ASCII or unicode and give back a unicode string,
+    Take a byte string in ASCII or string and give back a string,
     decoding the bytes if necessary.
 
     This is primarily a helper for libraries like ElementTree which take the

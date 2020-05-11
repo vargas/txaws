@@ -32,8 +32,8 @@ def route53_integration_tests(get_client):
             and ``delete_hosted_zone`` respectively.
             """
             zone_names = {
-                u"{}.example.invalid.".format(unicode(uuid4())),
-                u"{}.\N{SNOWMAN}.example.invalid.".format(unicode(uuid4())),
+                u"{}.example.invalid.".format(str(uuid4())),
+                u"{}.\N{SNOWMAN}.example.invalid.".format(str(uuid4())),
             }
 
             client = get_client(self)

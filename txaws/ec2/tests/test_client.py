@@ -1793,9 +1793,9 @@ class SignatureTestCase(TestCase):
         signature = client.Signature(self.creds, self.endpoint, self.params)
         self.assertEqual("a%20space", signature.encode("a space"))
 
-    def test_encode_unicode(self):
+    def test_encode_str(self):
         """
-        L{Signature.encode} accepts unicode strings and encode them un UTF-8.
+        L{Signature.encode} accepts str strings and encode them un UTF-8.
         """
         signature = client.Signature(self.creds, self.endpoint, self.params)
         self.assertEqual(

@@ -110,7 +110,7 @@ def s3_integration_tests(get_client):
             The objects returned by C{get_bucket} are sorted lexicographically by their
             key.
             """
-            bucket_name = unicode(uuid4())
+            bucket_name = str(uuid4())
             client = get_client(self)
             d = client.create_bucket(bucket_name)
             def created_bucket(ignored):
@@ -137,7 +137,7 @@ def s3_integration_tests(get_client):
             A subset of S3 objects in a bucket can be retrieved by specifying a value
             for the ``prefix`` argument to ``get_bucket``.
             """
-            bucket_name = unicode(uuid4())
+            bucket_name = str(uuid4())
             client = get_client(self)
             yield client.create_bucket(bucket_name)
             yield client.put_object(bucket_name, u"a", b"foo")
@@ -152,7 +152,7 @@ def s3_integration_tests(get_client):
             C{get_bucket_location} returns a L{Deferred} that fires
             C{b""}.
             """
-            bucket_name = unicode(uuid4())
+            bucket_name = str(uuid4())
             client = get_client(self)
             d = client.create_bucket(bucket_name)
             def created_bucket(ignored):
@@ -171,13 +171,13 @@ def s3_integration_tests(get_client):
             C{max_keys} can be passed to C{get_bucket} to limit the number of
             results.
             """
-            bucket_name = unicode(uuid4())
+            bucket_name = str(uuid4())
             client = get_client(self)
             d = client.create_bucket(bucket_name)
             def created_bucket(ignored):
                 # Put a few objects in it so we can retrieve some of them.
                 return gatherResults(list(
-                    client.put_object(bucket_name, unicode(i))
+                    client.put_object(bucket_name, str(i))
                     for i in range(3)
                 ))
             d.addCallback(created_bucket)
@@ -196,13 +196,13 @@ def s3_integration_tests(get_client):
             C{marker} can be passed to C{get_bucket} to specify the key in the result
             listing with which to start (the key after the value of C{marker}).
             """
-            bucket_name = unicode(uuid4())
+            bucket_name = str(uuid4())
             client = get_client(self)
             d = client.create_bucket(bucket_name)
             def created_bucket(ignored):
                 # Put a few objects in it so we can retrieve some of them.
                 return gatherResults(list(
-                    client.put_object(bucket_name, unicode(i))
+                    client.put_object(bucket_name, str(i))
                     for i in range(3)
                 ))
             d.addCallback(created_bucket)
@@ -222,13 +222,13 @@ def s3_integration_tests(get_client):
             not specified.
             """
             max_keys = 1000
-            bucket_name = unicode(uuid4())
+            bucket_name = str(uuid4())
             client = get_client(self)
             d = client.create_bucket(bucket_name)
             def created_bucket(ignored):
                 # Put a bunch of objects.  The default limit is 1000.
                 work = (
-                    client.put_object(bucket_name, unicode(i).encode("ascii"))
+                    client.put_object(bucket_name, str(i).encode("ascii"))
                     for i in range(max_keys + 3)
                 )
                 return gatherResults([

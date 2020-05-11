@@ -79,18 +79,18 @@ class ConsoleOutput(object):
 
     @ivar instance_id: The identifier of the instance the console text belongs
         to.
-    @type instance_id: L{unicode}
+    @type instance_id: L{str}
 
     @ivar timestamp: The time the output was last updated (prior to the
         creation of this object).
     @type timestamp: L{datetime.datetime}
 
     @ivar output: The text from the console.
-    @type output: L{unicode}
+    @type output: L{str}
     """
-    instance_id = attr.ib(validator=instance_of(unicode))
+    instance_id = attr.ib(validator=instance_of(str))
     timestamp = attr.ib(validator=instance_of(datetime))
-    output = attr.ib(validator=instance_of(unicode))
+    output = attr.ib(validator=instance_of(str))
 
 
 class SecurityGroup(object):

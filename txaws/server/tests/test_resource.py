@@ -422,7 +422,7 @@ class QueryAPITestCase(TestCase):
             errors = self.flushLoggedErrors()
             self.assertEquals(0, len(errors))
             self.assertEqual("MissingParameter - The request must contain "
-                             "the parameter Action (unicode)",
+                             "the parameter Action (str)",
                              request.response)
             self.assertEqual(400, request.code)
 
@@ -452,9 +452,9 @@ class QueryAPITestCase(TestCase):
 
         return self.api.handle(request).addCallback(check)
 
-    def test_handle_unicode_api_error(self):
+    def test_handle_str_api_error(self):
         """
-        If an L{APIError} contains a unicode message, L{QueryAPI} is able to
+        If an L{APIError} contains a str message, L{QueryAPI} is able to
         protect itself from it.
         """
         creds = AWSCredentials("access", "secret")
@@ -478,9 +478,9 @@ class QueryAPITestCase(TestCase):
         self.api.principal = TestPrincipal(creds)
         return self.api.handle(request).addCallback(check)
 
-    def test_handle_unicode_error(self):
+    def test_handle_str_error(self):
         """
-        If an arbitrary error raised by an API method contains a unicode
+        If an arbitrary error raised by an API method contains a str
         message, L{QueryAPI} is able to protect itself from it.
         """
         creds = AWSCredentials("access", "secret")

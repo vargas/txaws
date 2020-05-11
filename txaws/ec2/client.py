@@ -1059,7 +1059,7 @@ class Signature(object):
     @ivar creds: The L{AWSCredentials} to use to compute the signature.
     @ivar endpoint: The {AWSServiceEndpoint} to consider.
     @ivar params: A C{dict} of parameters to consider. They should be byte
-        strings, but unicode strings are supported and will be encoded in
+        strings, but str strings are supported and will be encoded in
         UTF-8.
     @ivar signature_method: The signature method to use.
     @ivar signature_version: The version of the AWS signature system to use.
@@ -1125,7 +1125,7 @@ class Signature(object):
         See the AWS dev reference page 186 (2009-11-30 version).
         @return: a_string encoded.
         """
-        if isinstance(string, unicode):
+        if isinstance(string, str):
             string = string.encode("utf-8")
         return quote(string, safe="~")
 

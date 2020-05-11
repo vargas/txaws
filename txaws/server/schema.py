@@ -172,9 +172,9 @@ class Parameter(object):
 
 
 class Unicode(Parameter):
-    """A parameter that must be a C{unicode}."""
+    """A parameter that must be a C{str}."""
 
-    kind = "unicode"
+    kind = "str"
 
     lower_than_min_template = "Length must be at least %s."
     greater_than_max_template = "Length exceeds maximum of %s."
@@ -190,9 +190,9 @@ class Unicode(Parameter):
 
 
 class UnicodeLine(Unicode):
-    """A parameter that must be a C{unicode} string without newlines."""
+    """A parameter that must be a C{str} string without newlines."""
 
-    kind = "unicode line"
+    kind = "str line"
 
     def parse(self, value):
         value = super(UnicodeLine, self).parse(value)

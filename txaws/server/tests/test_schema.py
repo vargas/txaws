@@ -116,10 +116,10 @@ class ParameterTestCase(TestCase):
         self.assertEqual("InvalidParameterValue", error.code)
         self.assertEqual("Invalid integer value foo", error.message)
 
-    def test_coerce_with_parameter_error_unicode(self):
+    def test_coerce_with_parameter_error_str(self):
         """
         L{Parameter.coerce} raises an L{APIError} if an invalid value is
-        passed as request argument and parameter value is unicode.
+        passed as request argument and parameter value is str.
         """
         parameter = Parameter("Test")
         parameter.parse = lambda value: int(value)
@@ -219,17 +219,17 @@ class ParameterTestCase(TestCase):
 class UnicodeTestCase(TestCase):
 
     def test_parse(self):
-        """L{Unicode.parse} converts the given raw C{value} to C{unicode}."""
+        """L{Unicode.parse} converts the given raw C{value} to C{str}."""
         parameter = Unicode("Test")
         self.assertEqual(u"foo", parameter.parse("foo"))
 
-    def test_parse_unicode(self):
-        """L{Unicode.parse} works with unicode input."""
+    def test_parse_str(self):
+        """L{Unicode.parse} works with str input."""
         parameter = Unicode("Test")
         self.assertEqual(u"cittá", parameter.parse("citt\xc3\xa1"))
 
     def test_format(self):
-        """L{Unicode.format} encodes the given C{unicode} with utf-8."""
+        """L{Unicode.format} encodes the given C{str} with utf-8."""
         parameter = Unicode("Test")
         value = parameter.format(u"fo\N{TAGBANWA LETTER SA}")
         self.assertEqual("fo\xe1\x9d\xb0", value)
@@ -249,13 +249,13 @@ class UnicodeTestCase(TestCase):
         self.assertEqual(400, error.status)
         self.assertEqual("InvalidParameterValue", error.code)
 
-    def test_invalid_unicode(self):
+    def test_invalid_str(self):
         """
-        The L{Unicode} parameter returns an error with invalid unicode data.
+        The L{Unicode} parameter returns an error with invalid str data.
         """
         parameter = Unicode("Test")
         error = self.assertRaises(APIError, parameter.coerce, "Test\x95Error")
-        self.assertIn(u"Invalid unicode value", error.message)
+        self.assertIn(u"Invalid str value", error.message)
         self.assertEqual(400, error.status)
         self.assertEqual("InvalidParameterValue", error.code)
 
@@ -264,7 +264,7 @@ class UnicodeLineTestCase(TestCase):
 
     def test_parse(self):
         """L{UnicodeLine.parse} converts the given raw C{value} to
-        C{unicode}."""
+        C{str}."""
         parameter = UnicodeLine("Test")
         self.assertEqual(u"foo", parameter.parse("foo"))
 
@@ -276,7 +276,7 @@ class UnicodeLineTestCase(TestCase):
         parameter = UnicodeLine("Test")
         error = self.assertRaises(APIError, parameter.coerce, "Test\nError")
         self.assertIn(
-            u"Invalid unicode line value Test\nError",
+            u"Invalid str line value Test\nError",
             error.message)
         self.assertEqual(400, error.status)
 
@@ -886,7 +886,7 @@ class SchemaTestCase(TestCase):
         self.assertEqual(400, error.status)
         self.assertEqual("MissingParameter", error.code)
         self.assertEqual("The request must contain the parameter foo "
-                         "(unicode)",
+                         "(str)",
                          error.message)
 
     def test_schema_conversion_structure_name(self):

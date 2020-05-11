@@ -48,7 +48,7 @@ class IRRSetChange(Interface):
     rrset that is allowed.
     """
     action = Attribute(
-        "The kind of change this represents as a unicode string.  "
+        "The kind of change this represents as a str string.  "
         "Either CREATE, DELETE, or UPSERT."
     )
     rrset = Attribute(

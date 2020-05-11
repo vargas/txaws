@@ -114,9 +114,9 @@ class S3URLContextTestCase(TestCase):
     """
     Tests for L{s3_url_context}.
     """
-    def test_unicode_bucket(self):
+    def test_str_bucket(self):
         """
-        If a unicode bucket is given, the resulting url is nevertheless
+        If a str bucket is given, the resulting url is nevertheless
         bytes.
         """
         test_uri = b"https://0.0.0.0:12345/"
@@ -130,9 +130,9 @@ class S3URLContextTestCase(TestCase):
             url,
         )
 
-    def test_unicode_object_name(self):
+    def test_str_object_name(self):
         """
-        If a unicode bucket is given, the resulting url is nevertheless
+        If a str bucket is given, the resulting url is nevertheless
         bytes.
         """
         test_uri = b"https://0.0.0.0:12345/"

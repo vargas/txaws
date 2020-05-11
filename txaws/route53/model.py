@@ -18,15 +18,15 @@ from attr import validators
 
 from constantly import Names, NamedConstant
 
-from ._util import maybe_bytes_to_unicode
-from .interface import IResourceRecordLoader, IBasicResourceRecord, IRRSetChange
-from ..client._validators import set_of
+from txaws.route53._util import bytes_to_str
+from txaws.route53.interface import IResourceRecordLoader, IBasicResourceRecord, IRRSetChange
+from txaws.client._validators import set_of
 
 @attr.s(frozen=True)
 class Name(object):
     text = attr.ib(
-        convert=lambda v: v + u"." if not v.endswith(u".") else v,
-        validator=validators.instance_of(unicode),
+        convert=lambda v: v + "." if not v.endswith(".") else v,
+        validator=validators.instance_of(str),
     )
 
     def __str__(self):
@@ -56,7 +56,7 @@ class RRSet(object):
     @type name: L{Name}
 
     @ivar type: The type of the resource record set. For example, NS, SOA, AAAA, etc.
-    @type type: L{unicode}
+    @type type: L{str}
 
     @ivar ttl: The time-to-live for this resource record set.
     @type ttl: L{int}
@@ -67,7 +67,7 @@ class RRSet(object):
     type = RRSetType.RESOURCE
 
     label = attr.ib(validator=validators.instance_of(Name))
-    type = attr.ib(validator=validators.instance_of(unicode))
+    type = attr.ib(validator=validators.instance_of(str))
     ttl = attr.ib(validator=validators.instance_of(int))
     records = attr.ib(validator=set_of(validators.provides(IBasicResourceRecord)))
 
@@ -87,15 +87,15 @@ class AliasRRSet(object):
 
     @ivar hosted_zone_id: Scope information for interpreting C{dns_name} (of
         variable meaning; see AWS docs).
-    @type hosted_zone_id: L{unicode}
+    @type hosted_zone_id: L{str}
     """
     type = type = RRSetType.ALIAS
 
     label = attr.ib(validator=validators.instance_of(Name))
-    type = attr.ib(validator=validators.instance_of(unicode))
+    type = attr.ib(validator=validators.instance_of(str))
     dns_name = attr.ib(validator=validators.instance_of(Name))
     evaluate_target_health = attr.ib(validator=validators.instance_of(bool))
-    hosted_zone_id = attr.ib(validator=validators.instance_of(unicode))
+    hosted_zone_id = attr.ib(validator=validators.instance_of(str))
 
 
 
@@ -127,11 +127,11 @@ class NS(object):
 
     @classmethod
     def basic_from_element(cls, e):
-        return cls(Name(maybe_bytes_to_unicode(e.find("Value").text)))
+        return cls(Name(bytes_to_str(e.find("Value").text)))
 
 
     def to_text(self):
-        return unicode(self.nameserver)
+        return str(self.nameserver)
 
 
 
@@ -143,11 +143,11 @@ class A(object):
 
     @classmethod
     def basic_from_element(cls, e):
-        return cls(IPv4Address(maybe_bytes_to_unicode(e.find("Value").text)))
+        return cls(IPv4Address(bytes_to_str(e.find("Value").text)))
 
 
     def to_text(self):
-        return unicode(self.address)
+        return str(self.address)
 
 
 
@@ -159,11 +159,11 @@ class AAAA(object):
 
     @classmethod
     def basic_from_element(cls, e):
-        return cls(IPv6Address(maybe_bytes_to_unicode(e.find("Value").text)))
+        return cls(IPv6Address(bytes_to_str(e.find("Value").text)))
 
 
     def to_text(self):
-        return unicode(self.address)
+        return str(self.address)
 
 
 
@@ -176,7 +176,7 @@ class MX(object):
 
     @classmethod
     def basic_from_element(cls, e):
-        parts = maybe_bytes_to_unicode(e.find("Value").text).split()
+        parts = bytes_to_str(e.find("Value").text).split()
         preference = int(parts[0])
         name = parts[1]
         return cls(Name(name), preference)
@@ -195,24 +195,24 @@ class CNAME(object):
 
     @classmethod
     def basic_from_element(cls, e):
-        return cls(Name(maybe_bytes_to_unicode(e.find("Value").text)))
+        return cls(Name(bytes_to_str(e.find("Value").text)))
 
     def to_text(self):
-        return unicode(self.canonical_name)
+        return str(self.canonical_name)
 
 
 
 def _split_quoted(text):
     """
-    Split a unicode string on *SPACE* characters.
+    Split a str string on *SPACE* characters.
 
     Splitting is not done at *SPACE* characters occurring within matched
     *QUOTATION MARK*s.  *REVERSE SOLIDUS* can be used to remove all
     interpretation from the following character.
 
-    :param unicode text: The string to split.
+    :param str text: The string to split.
 
-    :return: A two-tuple of unicode giving the two split pieces.
+    :return: A two-tuple of str giving the two split pieces.
     """
     quoted = False
     escaped = False
@@ -237,9 +237,9 @@ def _quote(text):
     """
     Quote the given string so ``_split_quoted`` will not split it up.
 
-    :param unicode text: The string to quote:
+    :param str text: The string to quote:
 
-    :return: A unicode string representing ``text`` as protected from
+    :return: A str string representing ``text`` as protected from
         splitting.
     """
     return (
@@ -263,14 +263,14 @@ class NAPTR(object):
     """
     order = attr.ib(validator=validators.instance_of(int))
     preference = attr.ib(validator=validators.instance_of(int))
-    flag = attr.ib(validator=validators.instance_of(unicode))
-    service = attr.ib(validator=validators.instance_of(unicode))
-    regexp = attr.ib(validator=validators.instance_of(unicode))
+    flag = attr.ib(validator=validators.instance_of(str))
+    service = attr.ib(validator=validators.instance_of(str))
+    regexp = attr.ib(validator=validators.instance_of(str))
     replacement = attr.ib(validator=validators.instance_of(Name))
 
     @classmethod
     def basic_from_element(cls, e):
-        value = maybe_bytes_to_unicode(e.find("Value").text)
+        value = bytes_to_str(e.find("Value").text)
         order, preference, rest = value.split(None, 2)
         flag, rest = _split_quoted(rest)
         service, rest = _split_quoted(rest)
@@ -305,11 +305,11 @@ class PTR(object):
 
     @classmethod
     def basic_from_element(cls, e):
-        return cls(Name(maybe_bytes_to_unicode(e.find("Value").text)))
+        return cls(Name(bytes_to_str(e.find("Value").text)))
 
 
     def to_text(self):
-        return unicode(self.name)
+        return str(self.name)
 
 
 
@@ -317,13 +317,13 @@ class PTR(object):
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
 class SPF(object):
-    value = attr.ib(validator=validators.instance_of(unicode))
+    value = attr.ib(validator=validators.instance_of(str))
 
     @classmethod
     def basic_from_element(cls, e):
         return cls(
             _split_quoted(
-                maybe_bytes_to_unicode(
+                bytes_to_str(
                     e.find("Value").text
                 )
             )[0]
@@ -347,7 +347,7 @@ class SRV(object):
 
     @classmethod
     def basic_from_element(cls, e):
-        priority, weight, port, name = maybe_bytes_to_unicode(
+        priority, weight, port, name = bytes_to_str(
             e.find("Value").text
         ).split()
         return cls(int(priority), int(weight), int(port), Name(name))
@@ -372,7 +372,7 @@ class TXT(object):
     @classmethod
     def basic_from_element(cls, e):
         pieces = []
-        value = maybe_bytes_to_unicode(e.find("Value").text)
+        value = bytes_to_str(e.find("Value").text)
         while value:
             piece, value = _split_quoted(value)
             pieces.append(piece)
@@ -402,7 +402,7 @@ class SOA(object):
 
     @classmethod
     def basic_from_element(cls, e):
-        text = maybe_bytes_to_unicode(e.find("Value").text)
+        text = bytes_to_str(e.find("Value").text)
         parts = dict(zip(_SOA_FIELDS, text.split()))
         return cls(
             Name(parts["mname"]),
@@ -426,15 +426,15 @@ _SOA_FIELDS = list(field.name for field in attr.fields(SOA))
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
 class UnknownRecordType(object):
-    value = attr.ib(validator=validators.instance_of(unicode))
+    value = attr.ib(validator=validators.instance_of(str))
 
     @classmethod
     def basic_from_element(cls, e):
-        return cls(maybe_bytes_to_unicode(e.find("Value").text))
+        return cls(bytes_to_str(e.find("Value").text))
 
 
     def to_text(self):
-        return unicode(self.value)
+        return str(self.value)
 
 
 
@@ -443,7 +443,7 @@ class HostedZone(object):
     """
     http://docs.aws.amazon.com/Route53/latest/APIReference/API_HostedZone.html
     """
-    name = attr.ib(validator=validators.instance_of(unicode))
-    identifier = attr.ib(validator=validators.instance_of(unicode))
+    name = attr.ib(validator=validators.instance_of(str))
+    identifier = attr.ib(validator=validators.instance_of(str))
     rrset_count = attr.ib(validator=validators.instance_of(int))
-    reference = attr.ib(validator=validators.instance_of(unicode))
+    reference = attr.ib(validator=validators.instance_of(str))

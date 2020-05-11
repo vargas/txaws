@@ -4,8 +4,6 @@
 Client wrapper for Amazon's Route53 (domain service).
 """
 
-from __future__ import print_function, unicode_literals
-
 __all__ = [
     "get_route53_client",
 ]
@@ -27,7 +25,7 @@ from txaws.client.base import RequestDetails, url_context, query, error_wrapper
 from txaws.service import REGION_US_EAST_1, AWSServiceEndpoint
 from txaws.util import XML
 
-from ._util import maybe_bytes_to_unicode, to_xml, tags
+from ._util import bytes_to_str, to_xml, tags
 from .model import (
     HostedZone, RRSetType, RRSetKey, RRSet, AliasRRSet, Name, SOA, NS, A, CNAME,
     AAAA, MX, NAPTR, PTR, SPF, SRV, TXT, UnknownRecordType,
@@ -152,8 +150,8 @@ class _Route53Client(object):
         """
         http://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateHostedZone.html
 
-        @type caller_reference: L{unicode}
-        @type name: L{unicode}
+        @type caller_reference: L{str}
+        @type name: L{str}
 
         @return: A L{Deferred} that fires with a L{HostedZone}
             describing the created zone or with a L{Failure} if there
@@ -204,7 +202,7 @@ class _Route53Client(object):
         """
         http://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html
 
-        @type zone_id: L{unicode}
+        @type zone_id: L{str}
 
         @param changes: An iterable of L{txaws.route53.interface.IRRSetChange} providers.
         """
@@ -227,10 +225,10 @@ class _Route53Client(object):
         """
         http://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html
 
-        @type zone_id: L{unicode}
+        @type zone_id: L{str}
         @type maxitems: L{int}
         @type name: L{Name}
-        @type type: L{unicode}
+        @type type: L{str}
 
         @return: A L{Deferred} that fires with a L{dict} mapping
             L{RRSetKey} instances to corresponding L{RRSet} instances.
@@ -239,13 +237,13 @@ class _Route53Client(object):
         if maxitems:
             args.append((u"maxitems", u"{}".format(maxitems)))
         if name:
-            args.append((u"name", unicode(name)))
+            args.append((u"name", str(name)))
         if type:
             args.append((u"type", type))
 
         d = _route53_op(
             method=b"GET",
-            path=[u"2013-04-01", u"hostedzone", unicode(zone_id), u"rrset"],
+            path=[u"2013-04-01", u"hostedzone", str(zone_id), u"rrset"],
             query=args,
             extract_result=self._handle_list_resource_record_sets_response
         )
@@ -256,8 +254,8 @@ class _Route53Client(object):
         result = {}
         rrsets = document.iterfind("./ResourceRecordSets/ResourceRecordSet")
         for rrset in rrsets:
-            label = Name(maybe_bytes_to_unicode(rrset.find("Name").text).encode("ascii").decode("idna"))
-            type = maybe_bytes_to_unicode(rrset.find("Type").text)
+            label = Name(bytes_to_str(rrset.find("Name").text).encode("ascii").decode("idna"))
+            type = bytes_to_str(rrset.find("Type").text)
 
             for kind in RRSetType.iterconstants():
                 value = self._get_rrset(kind, label, type, rrset)
@@ -314,11 +312,11 @@ class _Route53Client(object):
         return AliasRRSet(
             label=label,
             type=type,
-            dns_name=Name(maybe_bytes_to_unicode(aliastarget.find("DNSName").text)),
+            dns_name=Name(bytes_to_str(aliastarget.find("DNSName").text)),
             evaluate_target_health={
                 "true": True, "false": False,
             }.get(aliastarget.find("EvaluateTargetHealth").text),
-            hosted_zone_id=maybe_bytes_to_unicode(aliastarget.find("HostedZoneId").text),
+            hosted_zone_id=bytes_to_str(aliastarget.find("HostedZoneId").text),
         )
 
 
@@ -326,7 +324,7 @@ class _Route53Client(object):
         """
         http://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteHostedZone.html
 
-        @type zone_id: L{unicode}
+        @type zone_id: L{str}
         @return: A L{Deferred} that fires when the hosted zone has
             been deleted.
         """
@@ -360,10 +358,10 @@ class _Operation(object):
     @type method: L{bytes}
 
     @ivar path: The path component of the request URI.
-    @type path: L{list} opf L{unicode}
+    @type path: L{list} opf L{str}
 
     @ivar query: The query parameters of the request.
-    @type query: L{list} of L{tuple} of L{unicode}
+    @type query: L{list} of L{tuple} of L{str}
 
     @ivar body: A document to serialize into the request body.
     @type body: L{twisted.web.template.Tag}
@@ -390,10 +388,10 @@ def hostedzone_from_element(zone):
     Construct a L{HostedZone} instance from a I{HostedZone} XML element.
     """
     return HostedZone(
-        name=maybe_bytes_to_unicode(zone.find("Name").text).encode("ascii").decode("idna"),
-        identifier=maybe_bytes_to_unicode(zone.find("Id").text).replace(u"/hostedzone/", u""),
+        name=bytes_to_str(zone.find("Name").text).encode("ascii").decode("idna"),
+        identifier=bytes_to_str(zone.find("Id").text).replace(u"/hostedzone/", u""),
         rrset_count=int(zone.find("ResourceRecordSetCount").text),
-        reference=maybe_bytes_to_unicode(zone.find("CallerReference").text),
+        reference=bytes_to_str(zone.find("CallerReference").text),
     )
 
 
@@ -410,7 +408,7 @@ def to_element(change):
         ),
         tags.ResourceRecordSet(
             tags.Name(
-                unicode(change.rrset.label),
+                str(change.rrset.label),
             ),
             tags.Type(
                 change.rrset.type,

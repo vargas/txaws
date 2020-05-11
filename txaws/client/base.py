@@ -179,8 +179,8 @@ class _QueryArgument(object):
     """
     Representation of a single URL query argument, eg I{foo=bar}.
     """
-    name = attr.ib(validator=validators.instance_of(unicode))
-    value = attr.ib(default=None, validator=validators.optional(validators.instance_of(unicode)))
+    name = attr.ib(validator=validators.instance_of(str))
+    value = attr.ib(default=None, validator=validators.optional(validators.instance_of(str)))
 
     def url_encode(self):
         def q(t):
@@ -206,24 +206,24 @@ def url_context(**kw):
 
     @param scheme: The scheme portion of the URL, eg
         ``u"http"`` or ``u"https"``.
-    @type scheme: L{unicode}
+    @type scheme: L{str}
 
     @param host: The host portion of the URL, eg ``u"example.com"``.
-    @type host: L{unicode}
+    @type host: L{str}
 
     @param port: A non-default port for the URL or ``None`` for the
         scheme default.
     @type port: L{int} or L{NoneType}
 
-    @param path: The path portion of the URL as a list of unicode path
+    @param path: The path portion of the URL as a list of str path
         segments.
-    @type path: L{list} of L{unicode}
+    @type path: L{list} of L{str}
 
     @param query: The query arguments of the URL as a list of tuples.
-        Each tuple is length one (a unicode string representing a
-        no-value argument) or two (two unicode strings representing an
+        Each tuple is length one (a str string representing a
+        no-value argument) or two (two str strings representing an
         argument name and value).
-    @type query: L{list} of L{tuple} of L{unicode}
+    @type query: L{list} of L{tuple} of L{str}
     """
     # It would be nice if we could use twisted.python.url.URL instead.
     # However, the way "subresources" are represented using
@@ -242,10 +242,10 @@ class _URLContext(object):
     L{url_context} is the public constructor to hide the type and
     prevent subclassing.
     """
-    scheme = attr.ib(validator=validators.instance_of(unicode))
-    host = attr.ib(validator=validators.instance_of(unicode))
+    scheme = attr.ib(validator=validators.instance_of(str))
+    host = attr.ib(validator=validators.instance_of(str))
     port = attr.ib(validator=validators.optional(validators.instance_of(int)))
-    path = attr.ib(validator=_list_of(validators.instance_of(unicode)))
+    path = attr.ib(validator=_list_of(validators.instance_of(str)))
     query = attr.ib(
         default=attr.Factory(list),
         convert=_tuples_to_queryarg,
@@ -355,7 +355,7 @@ class RequestDetails(object):
         hash cannot be computed, C{None} (which corresponds to a
         request with an unsigned payload - ie, with a payload
         unprotected from tampering by a signature).
-    @ivar content_sha256: L{unicode}
+    @ivar content_sha256: L{str}
     """
     region = attr.ib(validator=validators.instance_of(bytes))
     service = attr.ib(validator=validators.instance_of(bytes))
@@ -381,7 +381,7 @@ class RequestDetails(object):
     )
     content_sha256 = attr.ib(
         default=None,
-        validator=validators.optional(validators.instance_of(unicode)),
+        validator=validators.optional(validators.instance_of(str)),
     )
 
 
@@ -540,7 +540,7 @@ class _Query(object):
         if not headers.hasHeader(u"host"):
             # XXX I'm not sure this is the right encoding for the
             # value in this context.  Headers.setRawHeaders would do
-            # something different if we just gave it the unicode.
+            # something different if we just gave it the str.
             headers.setRawHeaders(u"host", [url_context.get_encoded_host()])
 
         if self._credentials is not None:
