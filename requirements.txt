@@ -1,0 +1,8 @@
+attrs
+python-dateutil
+twisted[tls]>=15.5.0
+venusian
+lxml
+incremental
+pyrsistent
+constantly

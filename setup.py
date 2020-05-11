@@ -1,30 +1,16 @@
-from distutils.core import setup
 from glob import glob
 import os
+from setuptools import setup, find_packages
 
 from txaws import version
 
-# If setuptools is present, use it to find_packages(), and also
-# declare our dependency on python-dateutil.
-extra_setup_args = {}
-try:
-    from setuptools import find_packages
-    extra_setup_args['install_requires'] = [
-        'attrs', 'python-dateutil', 'twisted[tls]>=15.5.0', 'venusian', 'lxml',
-        'incremental', 'pyrsistent', 'constantly',
-    ]
-except ImportError:
-    def find_packages():
-        """
-        Compatibility wrapper.
+def parse_requirements(filename):
+    """load requirements from a pip requirements file"""
+    lineiter = (line.strip() for line in open(filename))
+    return [line for line in lineiter if line and (not line.startswith("#") and not line.startswith('-'))]
 
-        Taken from storm setup.py.
-        """
-        packages = []
-        for directory, subdirectories, files in os.walk("txaws"):
-            if '__init__.py' in files:
-                packages.append(directory.replace(os.sep, '.'))
-        return packages
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 long_description = """
 Twisted-based Asynchronous Libraries for Amazon Web Services and Eucalyptus
@@ -44,6 +30,7 @@ setup(
     packages=find_packages(),
     scripts=glob("./bin/*"),
     long_description=long_description,
+    install_requires = parse_requirements('requirements.txt'),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -59,5 +46,4 @@ setup(
     extras_require={
         "dev": ["treq", "zope.datetime", "boto3"],
     },
-    **extra_setup_args
     )
