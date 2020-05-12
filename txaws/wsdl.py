@@ -493,7 +493,7 @@ class WSDLParser(object):
             else:
                 raise RuntimeError("Top-level element with unexpected tag")
 
-        for name, element in responses.iteritems():
+        for name, element in responses.items():
             schemas[name] = self._parse_type(element, types)
             schemas[name].namespace = namespace
 

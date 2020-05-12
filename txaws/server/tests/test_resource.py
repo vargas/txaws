@@ -37,7 +37,7 @@ class FakeRequest(object):
 
     @property
     def args(self):
-        return dict((key, [value]) for key, value in self.params.iteritems())
+        return dict((key, [value]) for key, value in self.params.items())
 
     @property
     def method(self):
@@ -122,7 +122,7 @@ class AlternativeWireFormatQueryAPI(TestQueryAPI):
             "signature_method": "Hmacsha256",
             "signature_version": 2,
             "signature": request.args["signature"][0]}
-        params = dict((k, v[-1]) for k, v in request.args.iteritems())
+        params = dict((k, v[-1]) for k, v in request.args.items())
         raw = params.copy()
         raw.pop("signature")
         return {"transport_args": result,

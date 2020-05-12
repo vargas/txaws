@@ -480,9 +480,9 @@ class _Query(object):
         headers = {
             "x-amz-date": _auth_v4.makeAMZDate(instant),
         }
-        for key, value in metadata.iteritems():
+        for key, value in metadata.items():
             headers["x-amz-meta-" + key] = value
-        for key, value in amz_headers.iteritems():
+        for key, value in amz_headers.items():
             headers["x-amz-" + key] = value
         if content_sha256 is None:
             content_sha256 = b"UNSIGNED-PAYLOAD"
@@ -534,7 +534,7 @@ class _Query(object):
             self._details.metadata, self._details.amz_headers,
             self._details.content_sha256,
         )
-        for k, v in extra_headers.iteritems():
+        for k, v in extra_headers.items():
             headers.setRawHeaders(k, [v])
 
         if not headers.hasHeader("host"):

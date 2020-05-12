@@ -755,9 +755,9 @@ class Query(BaseQuery):
         else:
             data = None
             headers["x-amz-content-sha256"] = b"UNSIGNED-PAYLOAD"
-        for key, value in self.metadata.iteritems():
+        for key, value in self.metadata.items():
             headers["x-amz-meta-" + key] = value
-        for key, value in self.amz_headers.iteritems():
+        for key, value in self.amz_headers.items():
             headers["x-amz-" + key] = value
 
         # Before we check if the content type is set, let's see if we can set

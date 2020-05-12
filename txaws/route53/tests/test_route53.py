@@ -52,7 +52,7 @@ class POSTableData(Data):
 
 def static_resource(hierarchy):
     root = Resource()
-    for k, v in hierarchy.iteritems():
+    for k, v in hierarchy.items():
         if IResource.providedBy(v):
             root.putChild(k, v)
         elif isinstance(v, dict):

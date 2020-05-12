@@ -210,9 +210,9 @@ class AWSStatusIndicator(object):
 
     def show_error(self, error):
         # debugging output for now.
-        print error.value
+        print(error.value)
         try:
-            print error.value.response
+            print(error.value.response)
         except:
             pass
 
