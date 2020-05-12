@@ -22,11 +22,19 @@ def calculate_md5(data):
 
 
 def hmac_sha1(secret, data):
+    if isinstance(secret, str):
+        secret = secret.encode()
+    if isinstance(data, str):
+        data = data.encode()
     digest = hmac.new(secret, data, sha1).digest()
     return b64encode(digest)
 
 
 def hmac_sha256(secret, data):
+    if isinstance(secret, str):
+        secret = secret.encode()
+    if isinstance(data, str):
+        data = data.encode()
     digest = hmac.new(secret, data, sha256).digest()
     return b64encode(digest)
 

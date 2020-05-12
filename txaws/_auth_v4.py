@@ -22,6 +22,10 @@ def sign(key, msg):
 
     @return: The binary (B{not} the hex) digest of the HMAC signature.
     """
+    if isinstance(key, str):
+        key = key.encode()
+    if isinstance(msg, str):
+        msg = msg.encode()
     return hmac.new(key, msg, hashlib.sha256).digest()
 
 
@@ -386,12 +390,12 @@ class _SignableAWS4HMAC256Token:
             the AWS documentation as "the string to sign."
         @rtype: L{str}
         """
-        return "\n".join([
+        return ("\n".join([
             self.ALGORITHM,
             self.amz_date,
             self.credential_scope.serialize(),
             self.canonical_request.hash(),
-        ])
+        ])).encode()
 
     def signature(self, signing_key):
         """
@@ -404,6 +408,8 @@ class _SignableAWS4HMAC256Token:
         @return: the HMAC-256 signature.
         @rtype: L{str}
         """
+        if isinstance(signing_key, str):
+            signing_key = signing_key.encode()
         return hmac.new(
             signing_key,
             self.serialize(),

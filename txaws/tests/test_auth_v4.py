@@ -574,7 +574,12 @@ class SignableAWS4HMAC256TokenTestCase(unittest.SynchronousTestCase):
         serialization.
         """
         serialized = self.token.serialize()
-        serialized_hmac = hmac.new(self.key,
+        key = self.key
+        if isinstance(key, str):
+            key = key.encode()
+        if isinstance(serialized, str):
+            serialized = serialized.encode()
+        serialized_hmac = hmac.new(key,
                                    serialized,
                                    hashlib.sha256).hexdigest()
         self.assertEqual(self.token.signature(self.key), serialized_hmac)
