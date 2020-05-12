@@ -1,4 +1,4 @@
-from zope.interface import implements
+from zope.interface import implementer
 
 from twisted.internet.defer import succeed
 from twisted.web.iweb import IBodyProducer

@@ -10,7 +10,7 @@ import hmac
 from urllib.parse import urlparse, urlunparse
 import time
 
-from xml.etree.ElementTree import TreeBuilder
+from xml.etree.ElementTree import XMLParser
 
 
 __all__ = ["hmac_sha1", "hmac_sha256", "iso8601time", "calculate_md5", "XML"]
@@ -50,7 +50,7 @@ def iso8601time(time_tuple):
         return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
-class NamespaceFixXmlTreeBuilder(TreeBuilder):
+class NamespaceFixXmlTreeBuilder(XMLParser):
 
     def _fixname(self, key):
         if "}" in key:
@@ -81,7 +81,10 @@ def parse(url, defaultPort=True):
     url = url.strip()
     parsed = urlparse(url)
     scheme = parsed[0]
-    path = urlunparse(("", "") + parsed[2:])
+    if isinstance(scheme, bytes):
+        path = urlunparse((b"", b"") + parsed[2:])
+    else:
+        path = urlunparse(("", "") + parsed[2:])
     host = parsed[1]
 
     if ":" in host:

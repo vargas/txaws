@@ -519,7 +519,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_parse_create_key_pair_response(self):
         """Parse a CreateKeyPairResponse payload."""
         schema = self.schemas["CreateKeyPairResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         xml = (b"<CreateKeyPairResponse xmlns=\"%s\">"
                b"<requestId>65d85081-abbc</requestId>"
                b"<keyName>foo</keyName>"
@@ -537,7 +537,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_parse_delete_key_pair_response(self):
         """Parse a DeleteKeyPairResponse payload."""
         schema = self.schemas["DeleteKeyPairResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         xml = (b"<DeleteKeyPairResponse xmlns=\"%s\">"
                b"<requestId>acc41b73-4c47-4f80</requestId>"
                b"<return>true</return>"
@@ -551,7 +551,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_parse_describe_key_pairs_response(self):
         """Parse a DescribeKeyPairsResponse payload."""
         schema = self.schemas["DescribeKeyPairsResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         xml = (b"<DescribeKeyPairsResponse xmlns=\"%s\">"
                b"<requestId>3ef0aa1d-57dd-4272</requestId>"
                b"<keySet>"
@@ -571,7 +571,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_modify_describe_key_pairs_response(self):
         """Modify a DescribeKeyPairsResponse payload."""
         schema = self.schemas["DescribeKeyPairsResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         xml = (b"<DescribeKeyPairsResponse xmlns=\"%s\">"
                b"<requestId>3ef0aa1d-57dd-4272</requestId>"
                b"<keySet>"
@@ -598,7 +598,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_create_describe_key_pairs_response(self):
         """Create a DescribeKeyPairsResponse payload."""
         schema = self.schemas["DescribeKeyPairsResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "abc"
         key = response.keySet.append()
@@ -619,7 +619,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
         """Create a DescribeAddressesResponse payload.
         """
         schema = self.schemas["DescribeAddressesResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "abc"
         address = response.addressesSet.append()
@@ -638,7 +638,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
         """Create a DescribeInstancesResponse payload.
         """
         schema = self.schemas["DescribeInstancesResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "abc"
         reservation = response.reservationSet.append()
@@ -662,7 +662,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
         """Create a DescribeInstancesResponse payload.
         """
         schema = self.schemas["DescribeInstancesResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "abc"
         reservation = response.reservationSet.append()
@@ -685,7 +685,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_parse_describe_security_groups_response(self):
         """Parse a DescribeSecurityGroupsResponse payload."""
         schema = self.schemas["DescribeSecurityGroupsResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         xml = (b"<DescribeSecurityGroupsResponse xmlns=\"%s\">"
                b"<requestId>3ef0aa1d-57dd-4272</requestId>"
                b"<securityGroupInfo>"
@@ -721,7 +721,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_modify_describe_security_groups_response(self):
         """Modify a DescribeSecurityGroupsResponse payload."""
         schema = self.schemas["DescribeSecurityGroupsResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         xml = (b"<DescribeSecurityGroupsResponse xmlns=\"%s\">"
                b"<requestId>3ef0aa1d-57dd-4272</requestId>"
                b"<securityGroupInfo>"
@@ -778,7 +778,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_create_describe_security_groups_response(self):
         """Create a DescribeSecurityGroupsResponse payload."""
         schema = self.schemas["DescribeSecurityGroupsResponse"]
-        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "requestId123"
         group = response.securityGroupInfo.append()

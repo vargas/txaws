@@ -403,7 +403,7 @@ class SequenceItem:
         """
         tag = self._schema.tag
         children = self._root.getchildren()
-        if len(children) >= self._schema.max_occurs:
+        if len(children) >= int(self._schema.max_occurs):
             raise WSDLParseError("Too many items in tag '%s'" % tag)
         schema = self._schema.child
         tag = "item"
