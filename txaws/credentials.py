@@ -3,7 +3,7 @@
 
 """Credentials for accessing AWS services."""
 
-import ConfigParser
+from configparser import SafeConfigParser, NoOptionError
 import os
 
 import attr
@@ -77,7 +77,7 @@ def _load_shared_credentials(environ, profile=None):
         ENV_SHARED_CREDENTIALS_FILE,
         os.path.expanduser("~/.aws/credentials"),
     )
-    config = ConfigParser.SafeConfigParser()
+    config = SafeConfigParser()
     if not config.read([credentials_path]):
         raise _CompatCredentialsNotFoundError(
             "Could not find credentials in the environment or filesystem",
@@ -91,7 +91,7 @@ def _load_shared_credentials(environ, profile=None):
             config.get(profile, "aws_access_key_id"),
             config.get(profile, "aws_secret_access_key"),
         )
-    except ConfigParser.NoOptionError as error:
+    except NoOptionError as error:
         raise CredentialsNotFoundError(
             "Profile {0.section!r} has no {0.option!r}".format(error),
         )

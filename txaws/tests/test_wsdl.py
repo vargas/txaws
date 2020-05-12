@@ -46,7 +46,7 @@ class NodeSchemaTestCase(WsdlBaseTestCase):
         schema = NodeSchema("foo", [LeafSchema("bar")])
         foo = NodeItem(schema)
         foo.bar = "spam"
-        self.assertEqual("<foo><bar>spam</bar></foo>",
+        self.assertEqual(b"<foo><bar>spam</bar></foo>",
                          etree.tostring(schema.dump(foo)))
 
     def test_dump_with_multiple_children(self):
@@ -57,7 +57,7 @@ class NodeSchemaTestCase(WsdlBaseTestCase):
         foo = NodeItem(schema)
         foo.bar = "spam1"
         foo.egg = "spam2"
-        self.assertEqual("<foo><bar>spam1</bar><egg>spam2</egg></foo>",
+        self.assertEqual(b"<foo><bar>spam1</bar><egg>spam2</egg></foo>",
                          etree.tostring(schema.dump(foo)))
 
     def test_dump_with_missing_attribute(self):
@@ -67,7 +67,7 @@ class NodeSchemaTestCase(WsdlBaseTestCase):
         schema = NodeSchema("foo")
         schema.add(LeafSchema("bar"), min_occurs=0)
         foo = NodeItem(schema)
-        self.assertEqual("<foo/>", etree.tostring(schema.dump(foo)))
+        self.assertEqual(b"<foo/>", etree.tostring(schema.dump(foo)))
 
 
 class NodeItemTestCase(WsdlBaseTestCase):
@@ -514,7 +514,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
         parser = WSDLParser()
         wsdl_dir = os.path.join(os.path.dirname(__file__), "../wsdl")
         wsdl_path = os.path.join(wsdl_dir, "2009-11-30.ec2.wsdl")
-        self.schemas = parser.parse(open(wsdl_path).read())
+        self.schemas = parser.parse(open(wsdl_path).read().encode())
 
     def test_parse_create_key_pair_response(self):
         """Parse a CreateKeyPairResponse payload."""

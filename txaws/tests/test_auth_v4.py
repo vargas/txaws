@@ -6,7 +6,7 @@ Unit tests for AWS authorization, version 4.
 import datetime
 import hashlib
 import hmac
-import urlparse
+import urllib.parse import urlparse
 
 from twisted.trial import unittest
 
@@ -262,7 +262,7 @@ class MakeCanonicalURITestCase(unittest.SynchronousTestCase):
         path.
         """
         self.assertEqual(
-            _make_canonical_uri(urlparse.urlparse('https://www.amazon.com/')),
+            _make_canonical_uri(urlparse('https://www.amazon.com/')),
             "https://www.amazon.com/")
 
     def test_path(self):
@@ -271,7 +271,7 @@ class MakeCanonicalURITestCase(unittest.SynchronousTestCase):
         """
         self.assertEqual(
             _make_canonical_uri(
-                urlparse.urlparse('https://www.amazon.com/a/b')),
+                urlparse('https://www.amazon.com/a/b')),
             "https://www.amazon.com/a/b")
 
     def test_path_not_normalized(self):
@@ -281,7 +281,7 @@ class MakeCanonicalURITestCase(unittest.SynchronousTestCase):
         """
         self.assertEqual(
             _make_canonical_uri(
-                urlparse.urlparse('https://www.amazon.com//a/b')),
+                urlparse('https://www.amazon.com//a/b')),
             "https://www.amazon.com//a/b")
 
     def test_query_params_and_fragments_removed(self):
@@ -289,7 +289,7 @@ class MakeCanonicalURITestCase(unittest.SynchronousTestCase):
         A URL's canonical URI has that URL's query string, parameters, and
         fragment removed.
         """
-        parsed = urlparse.urlparse('https://www.amazon.com//a/b')
+        parsed = urlparse('https://www.amazon.com//a/b')
         parsed = parsed._replace(query="query=1",
                                  params="params",
                                  fragment="fragment")
@@ -300,7 +300,7 @@ class MakeCanonicalURITestCase(unittest.SynchronousTestCase):
         """
         A path is URL encoded when necessary.
         """
-        parsed = urlparse.urlparse('https://www.amazon.com/\xe2')
+        parsed = urlparse('https://www.amazon.com/\xe2')
         self.assertEqual(_make_canonical_uri(parsed),
                          "https://www.amazon.com/%E2")
 
@@ -315,7 +315,7 @@ class MakeCanonicalQueryStringTestCase(unittest.SynchronousTestCase):
         Blank query parameters are retained.
         """
         self.assertEqual(_make_canonical_query_string(
-            urlparse.urlparse("https://www.amazon.com/path?q")),
+            urlparse("https://www.amazon.com/path?q")),
                          "q=")
 
     def test_unique_query_parameters_sorted(self):
@@ -324,7 +324,7 @@ class MakeCanonicalQueryStringTestCase(unittest.SynchronousTestCase):
         """
         self.assertEqual(
             _make_canonical_query_string(
-                urlparse.urlparse('http://www.amazon.com/path?b=1&a=2')),
+                urlparse('http://www.amazon.com/path?b=1&a=2')),
             "a=2&b=1",
         )
 
@@ -334,7 +334,7 @@ class MakeCanonicalQueryStringTestCase(unittest.SynchronousTestCase):
         """
         self.assertEqual(
             _make_canonical_query_string(
-                urlparse.urlparse('http://www.amazon.com/path?a=2&a=1&b=3')),
+                urlparse('http://www.amazon.com/path?a=2&a=1&b=3')),
             "a=1&a=2&b=3",
         )
 
@@ -344,7 +344,7 @@ class MakeCanonicalQueryStringTestCase(unittest.SynchronousTestCase):
         """
         self.assertEqual(
             _make_canonical_query_string(
-                urlparse.urlparse('http://www.amazon.com/path?%21=%25')),
+                urlparse('http://www.amazon.com/path?%21=%25')),
             "%21=%25",
         )
 

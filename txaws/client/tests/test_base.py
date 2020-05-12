@@ -6,7 +6,7 @@ Tests for L{txaws.client.base}.
 
 import os
 
-from StringIO import StringIO
+from io import StringIO
 from datetime import datetime
 from hashlib import sha256
 

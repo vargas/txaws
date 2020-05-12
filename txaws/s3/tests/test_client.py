@@ -1,7 +1,7 @@
 import datetime
 from hashlib import sha256
 import warnings
-from urllib import quote
+from urllib.parse import quote
 
 from attr import assoc
 

@@ -6,7 +6,7 @@
 """EC2 client support."""
 
 from datetime import datetime
-from urllib import quote
+from urllib.parse import quote
 from base64 import b64encode
 
 from dateutil.parser import parse as parse_timestamp

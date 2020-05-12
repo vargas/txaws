@@ -2,7 +2,7 @@
 
 import os
 from urllib.parse import urlparse
-from urllib import quote
+from urllib.parse import quote
 from datetime import datetime
 from io import BytesIO
 
@@ -12,7 +12,7 @@ except ImportError:
     from xml.parsers.expat import ExpatError as ParseError
 
 import warnings
-from StringIO import StringIO
+from io import StringIO
 
 import attr
 from attr import validators

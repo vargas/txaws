@@ -10,12 +10,7 @@ import hmac
 from urllib.parse import urlparse, urlunparse
 import time
 
-# Import XMLTreeBuilder from somewhere; here in one place to prevent
-# duplication.
-try:
-    from xml.etree.ElementTree import XMLTreeBuilder
-except ImportError:
-    from elementtree.ElementTree import XMLTreeBuilder
+from xml.etree.ElementTree import TreeBuilder
 
 
 __all__ = ["hmac_sha1", "hmac_sha256", "iso8601time", "calculate_md5", "XML"]
@@ -47,7 +42,7 @@ def iso8601time(time_tuple):
         return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
-class NamespaceFixXmlTreeBuilder(XMLTreeBuilder):
+class NamespaceFixXmlTreeBuilder(TreeBuilder):
 
     def _fixname(self, key):
         if "}" in key:
