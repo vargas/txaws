@@ -333,18 +333,18 @@ class EC2ClientInstancesTestCase(TestCase):
             "foo",
             "bar",
             {"ImageId": "ami-1234", "MaxCount": "2", "MinCount": "1",
-             "SecurityGroup.1": u"group1", "KeyName": u"default",
-             "UserData": "Zm9v", "InstanceType": u"m1.small",
-             "Placement.AvailabilityZone": u"us-east-1b",
-             "KernelId": u"k-1234", "RamdiskId": u"r-1234"},
+             "SecurityGroup.1": "group1", "KeyName": "default",
+             "UserData": "Zm9v", "InstanceType": "m1.small",
+             "Placement.AvailabilityZone": "us-east-1b",
+             "KernelId": "k-1234", "RamdiskId": "r-1234"},
         )
 
         creds = AWSCredentials("foo", "bar")
         ec2 = client.EC2Client(creds, query_factory=factory)
-        d = ec2.run_instances("ami-1234", 1, 2, security_groups=[u"group1"],
-            key_name=u"default", user_data=u"foo", instance_type=u"m1.small",
-            availability_zone=u"us-east-1b", kernel_id=u"k-1234",
-            ramdisk_id=u"r-1234")
+        d = ec2.run_instances("ami-1234", 1, 2, security_groups=["group1"],
+            key_name="default", user_data="foo", instance_type="m1.small",
+            availability_zone="us-east-1b", kernel_id="k-1234",
+            ramdisk_id="r-1234")
         d.addCallback(self.check_parsed_run_instances)
 
     def test_run_instances_with_subnet(self):
@@ -354,28 +354,28 @@ class EC2ClientInstancesTestCase(TestCase):
             "foo",
             "bar",
             {"ImageId": "ami-1234", "MaxCount": "2", "MinCount": "1",
-             "SecurityGroupId.1": u"sg-a72d9f92e", "KeyName": u"default",
-             "UserData": "Zm9v", "InstanceType": u"m1.small",
-             "Placement.AvailabilityZone": u"us-east-1b",
-             "KernelId": u"k-1234", "RamdiskId": u"r-1234",
+             "SecurityGroupId.1": "sg-a72d9f92e", "KeyName": "default",
+             "UserData": "Zm9v", "InstanceType": "m1.small",
+             "Placement.AvailabilityZone": "us-east-1b",
+             "KernelId": "k-1234", "RamdiskId": "r-1234",
              "SubnetId": "subnet-a72d829f"},
         )
 
         creds = AWSCredentials("foo", "bar")
         ec2 = client.EC2Client(creds, query_factory=factory)
-        d = ec2.run_instances("ami-1234", 1, 2, security_group_ids=[u"sg-a72d9f92e"],
-            key_name=u"default", user_data=u"foo", instance_type=u"m1.small",
-            availability_zone=u"us-east-1b", kernel_id=u"k-1234",
-            ramdisk_id=u"r-1234", subnet_id="subnet-a72d829f")
+        d = ec2.run_instances("ami-1234", 1, 2, security_group_ids=["sg-a72d9f92e"],
+            key_name="default", user_data="foo", instance_type="m1.small",
+            availability_zone="us-east-1b", kernel_id="k-1234",
+            ramdisk_id="r-1234", subnet_id="subnet-a72d829f")
         d.addCallback(self.check_parsed_run_instances)
 
     def test_run_instances_with_subnet_but_without_secgroup_id(self):
         creds = AWSCredentials("foo", "bar")
         ec2 = client.EC2Client(creds)
         error = self.assertRaises(ValueError, ec2.run_instances, "ami-1234", 1, 2,
-            key_name=u"default", user_data=u"foo", instance_type=u"m1.small",
-            availability_zone=u"us-east-1b", kernel_id=u"k-1234",
-            ramdisk_id=u"r-1234", subnet_id="subnet-a72d829f")
+            key_name="default", user_data="foo", instance_type="m1.small",
+            availability_zone="us-east-1b", kernel_id="k-1234",
+            ramdisk_id="r-1234", subnet_id="subnet-a72d829f")
         self.assertEqual(
             str(error),
             "You must specify the security_group_ids with the subnet_id"
@@ -385,9 +385,9 @@ class EC2ClientInstancesTestCase(TestCase):
         creds = AWSCredentials("foo", "bar")
         ec2 = client.EC2Client(creds)
         error = self.assertRaises(ValueError, ec2.run_instances, "ami-1234", 1, 2,
-            key_name=u"default", user_data=u"foo", instance_type=u"m1.small",
-            availability_zone=u"us-east-1b", kernel_id=u"k-1234",
-            ramdisk_id=u"r-1234")
+            key_name="default", user_data="foo", instance_type="m1.small",
+            availability_zone="us-east-1b", kernel_id="k-1234",
+            ramdisk_id="r-1234")
         self.assertEqual(
             str(error),
             ("You must specify either the subnet_id and "
@@ -458,7 +458,7 @@ class EC2ClientConsoleOutputTestCase(TestCase):
         from the cloud.
         """
         creds = AWSCredentials("foo", "bar")
-        instance_id = u"i-abcdef0123456789"
+        instance_id = "i-abcdef0123456789"
         query_factory = make_query_factory(
             payload.sample_get_console_output_result,
             "GetConsoleOutput",
@@ -478,7 +478,7 @@ class EC2ClientConsoleOutputTestCase(TestCase):
                 instance_id,
                 # Take from hard-coded payload
                 datetime(2010, 10, 14, 1, 12, 41, tzinfo=utc),
-                u"""\
+                """\
 Linux version 2.6.16-xenU (builder@patchbat.amazonsa) (gcc version 4.0.1 20050727 (Red Hat 4.0.1-5)) #1 SMP Thu Oct 26 08:41:26 SAST 2006
 BIOS-provided physical RAM map:
 Xen: 0000000000000000 - 000000006a400000 (usable)
@@ -1108,7 +1108,7 @@ class EC2ClientEBSTestCase(TestCase):
         attachment = volume.attachments[0]
         self.assertEquals(attachment.instance_id, "i-6058a509")
         self.assertEquals(attachment.status, "attached")
-        self.assertEquals(attachment.device, u"/dev/sdh")
+        self.assertEquals(attachment.device, "/dev/sdh")
         attach_time = datetime(2008, 05, 07, 12, 51, 50)
         self.assertEquals(attachment.attach_time, attach_time)
 
@@ -1800,7 +1800,7 @@ class SignatureTestCase(TestCase):
         signature = client.Signature(self.creds, self.endpoint, self.params)
         self.assertEqual(
             "f%C3%A9e",
-            signature.encode(u"f\N{LATIN SMALL LETTER E WITH ACUTE}e"))
+            signature.encode("f\N{LATIN SMALL LETTER E WITH ACUTE}e"))
 
     def test_canonical_query(self):
         signature = client.Signature(self.creds, self.endpoint, self.params)

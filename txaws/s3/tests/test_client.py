@@ -121,7 +121,7 @@ class S3URLContextTestCase(TestCase):
         """
         test_uri = b"https://0.0.0.0:12345/"
         endpoint = AWSServiceEndpoint(uri=test_uri)
-        bucket = u"\N{SNOWMAN}"
+        bucket = "\N{SNOWMAN}"
         context = client.s3_url_context(endpoint, bucket)
         url = context.get_url()
         self.assertIsInstance(url, bytes)
@@ -138,7 +138,7 @@ class S3URLContextTestCase(TestCase):
         test_uri = b"https://0.0.0.0:12345/"
         endpoint = AWSServiceEndpoint(uri=test_uri)
         bucket = b"mybucket"
-        object_name = u"\N{SNOWMAN}"
+        object_name = "\N{SNOWMAN}"
         context = client.s3_url_context(endpoint, bucket, object_name)
         url = context.get_url()
         self.assertIsInstance(url, bytes)
@@ -817,7 +817,7 @@ class S3ClientTestCase(TestCase):
                     region=REGION_US_EAST_1,
                     method=b"PUT",
                     url_context=client.s3_url_context(self.endpoint, "mybucket", "objectname"),
-                    headers=Headers({u"content-type": [u"text/plain"]}),
+                    headers=Headers({"content-type": ["text/plain"]}),
                     metadata={"key": "some meta data"},
                     amz_headers={
                         "acl": "public-read",
@@ -850,7 +850,7 @@ class S3ClientTestCase(TestCase):
                     region=REGION_US_EAST_1,
                     method=b"PUT",
                     url_context=client.s3_url_context(self.endpoint, "mybucket", "objectname"),
-                    headers=Headers({u"content-type": [u"text/plain"]}),
+                    headers=Headers({"content-type": ["text/plain"]}),
                     metadata={"key": "some meta data"},
                     amz_headers={
                         "acl": "public-read",

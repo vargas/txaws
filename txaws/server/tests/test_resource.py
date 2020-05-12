@@ -283,7 +283,7 @@ class QueryAPITestCase(TestCase):
         creds = AWSCredentials("access", "secret")
         endpoint = AWSServiceEndpoint("http://uri")
         query = Query(action="SomeAction", creds=creds, endpoint=endpoint,
-                      other_params={"Version": u"1.2.3"})
+                      other_params={"Version": "1.2.3"})
         query.sign()
         request = FakeRequest(query.params, endpoint)
 
@@ -466,7 +466,7 @@ class QueryAPITestCase(TestCase):
 
         def fail_execute(call):
             raise APIError(400, code="LangError",
-                           message=u"\N{HIRAGANA LETTER A}dvanced")
+                           message="\N{HIRAGANA LETTER A}dvanced")
         self.api.execute = fail_execute
 
         def check(ignored):
@@ -491,7 +491,7 @@ class QueryAPITestCase(TestCase):
         request = FakeRequest(query.params, endpoint)
 
         def fail_execute(call):
-            raise ValueError(u"\N{HIRAGANA LETTER A}dvanced")
+            raise ValueError("\N{HIRAGANA LETTER A}dvanced")
         self.api.execute = fail_execute
 
         def check(ignored):

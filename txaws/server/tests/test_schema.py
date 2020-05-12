@@ -126,7 +126,7 @@ class ParameterTestCase(TestCase):
         error = self.assertRaises(APIError, parameter.coerce, "citt\xc3\xa1")
         self.assertEqual(400, error.status)
         self.assertEqual("InvalidParameterValue", error.code)
-        self.assertEqual(u"Invalid integer value cittá", error.message)
+        self.assertEqual("Invalid integer value cittá", error.message)
 
     def test_coerce_with_empty_strings(self):
         """
@@ -220,17 +220,17 @@ class UnicodeTestCase(TestCase):
     def test_parse(self):
         """L{Unicode.parse} converts the given raw C{value} to C{str}."""
         parameter = Unicode("Test")
-        self.assertEqual(u"foo", parameter.parse("foo"))
+        self.assertEqual("foo", parameter.parse("foo"))
 
     def test_parse_str(self):
         """L{Unicode.parse} works with str input."""
         parameter = Unicode("Test")
-        self.assertEqual(u"cittá", parameter.parse("citt\xc3\xa1"))
+        self.assertEqual("cittá", parameter.parse("citt\xc3\xa1"))
 
     def test_format(self):
         """L{Unicode.format} encodes the given C{str} with utf-8."""
         parameter = Unicode("Test")
-        value = parameter.format(u"fo\N{TAGBANWA LETTER SA}")
+        value = parameter.format("fo\N{TAGBANWA LETTER SA}")
         self.assertEqual("fo\xe1\x9d\xb0", value)
         self.assertTrue(isinstance(value, str))
 
@@ -254,7 +254,7 @@ class UnicodeTestCase(TestCase):
         """
         parameter = Unicode("Test")
         error = self.assertRaises(APIError, parameter.coerce, "Test\x95Error")
-        self.assertIn(u"Invalid str value", error.message)
+        self.assertIn("Invalid str value", error.message)
         self.assertEqual(400, error.status)
         self.assertEqual("InvalidParameterValue", error.code)
 
@@ -265,7 +265,7 @@ class UnicodeLineTestCase(TestCase):
         """L{UnicodeLine.parse} converts the given raw C{value} to
         C{str}."""
         parameter = UnicodeLine("Test")
-        self.assertEqual(u"foo", parameter.parse("foo"))
+        self.assertEqual("foo", parameter.parse("foo"))
 
     def test_newlines_in_text(self):
         """
@@ -275,7 +275,7 @@ class UnicodeLineTestCase(TestCase):
         parameter = UnicodeLine("Test")
         error = self.assertRaises(APIError, parameter.coerce, "Test\nError")
         self.assertIn(
-            u"Invalid str line value Test\nError",
+            "Invalid str line value Test\nError",
             error.message)
         self.assertEqual(400, error.status)
 
@@ -500,14 +500,14 @@ class SchemaTestCase(TestCase):
         """L{Schema.extract} can handle multiple parameters."""
         schema = Schema(Unicode("name"), Integer("count"))
         arguments, _ = schema.extract({"name": "value", "count": "123"})
-        self.assertEqual(u"value", arguments.name)
+        self.assertEqual("value", arguments.name)
         self.assertEqual(123, arguments.count)
 
     def test_extract_with_optional(self):
         """L{Schema.extract} can handle optional parameters."""
         schema = Schema(Unicode("name"), Integer("count", optional=True))
         arguments, _ = schema.extract({"name": "value"})
-        self.assertEqual(u"value", arguments.name)
+        self.assertEqual("value", arguments.name)
         self.assertEqual(None, arguments.count)
 
     def test_extract_with_optional_default(self):
@@ -518,7 +518,7 @@ class SchemaTestCase(TestCase):
         schema = Schema(Unicode("name"),
                         Integer("count", optional=True, default=5))
         arguments, _ = schema.extract({"name": "value"})
-        self.assertEqual(u"value", arguments.name)
+        self.assertEqual("value", arguments.name)
         self.assertEqual(5, arguments.count)
 
     def test_extract_structure_with_optional(self):
@@ -528,7 +528,7 @@ class SchemaTestCase(TestCase):
                 "struct",
                 fields={"name": Unicode(optional=True, default="radix")}))
         arguments, _ = schema.extract({"struct": {}})
-        self.assertEqual(u"radix", arguments.struct.name)
+        self.assertEqual("radix", arguments.struct.name)
 
     def test_extract_with_numbered(self):
         """
@@ -576,7 +576,7 @@ class SchemaTestCase(TestCase):
              "IpPermissions.1.Groups.1.GroupName": "Bar",
              "IpPermissions.1.Groups.2.GroupName": "Egg"})
 
-        self.assertEqual(u"Foo", arguments.GroupName)
+        self.assertEqual("Foo", arguments.GroupName)
         self.assertEqual(1, len(arguments.IpPermissions))
         self.assertEqual(1234, arguments.IpPermissions[0].FromPort)
         self.assertEqual(5678, arguments.IpPermissions[0].ToPort)
@@ -770,7 +770,7 @@ class SchemaTestCase(TestCase):
         schema = Schema(Unicode("name"))
         schema = schema.extend(Unicode("computer"))
         arguments, _ = schema.extract({"name": "value", "computer": "testing"})
-        self.assertEqual(u"value", arguments.name)
+        self.assertEqual("value", arguments.name)
         self.assertEqual("testing", arguments.computer)
 
     def test_add_extra_schema_items(self):
@@ -779,7 +779,7 @@ class SchemaTestCase(TestCase):
         schema = schema.extend(Unicode("computer"), Integer("count"))
         arguments, _ = schema.extract({"name": "value", "computer": "testing",
                                        "count": "5"})
-        self.assertEqual(u"value", arguments.name)
+        self.assertEqual("value", arguments.name)
         self.assertEqual("testing", arguments.computer)
         self.assertEqual(5, arguments.count)
 
@@ -802,9 +802,9 @@ class SchemaTestCase(TestCase):
         The default of a L{List} can be specified as a list.
         """
         schema = Schema(List("names", Unicode(), optional=True,
-                             default=[u"foo", u"bar"]))
+                             default=["foo", "bar"]))
         arguments, _ = schema.extract({})
-        self.assertEqual([u"foo", u"bar"], arguments.names)
+        self.assertEqual(["foo", "bar"], arguments.names)
 
     def test_list_of_list(self):
         """L{List}s can be nested."""
@@ -920,10 +920,10 @@ class SchemaTestCase(TestCase):
         fields.
         """
         schema = Schema(Unicode("foos.N.field"),
-                        Unicode("foos.N.field2", optional=True, default=u"hi"))
-        arguments, _ = schema.extract({"foos.0.field": u"existent"})
-        self.assertEqual(u"existent", arguments.foos[0].field)
-        self.assertEqual(u"hi", arguments.foos[0].field2)
+                        Unicode("foos.N.field2", optional=True, default="hi"))
+        arguments, _ = schema.extract({"foos.0.field": "existent"})
+        self.assertEqual("existent", arguments.foos[0].field)
+        self.assertEqual("hi", arguments.foos[0].field2)
 
     def test_additional_schema_attributes(self):
         """
@@ -970,9 +970,9 @@ class SchemaTestCase(TestCase):
         self.assertEqual(result, schema2.result)
         self.assertEqual(set(errors), schema2.errors)
 
-        arguments, _ = schema2.extract({'id': '5', 'scope': u'foo'})
+        arguments, _ = schema2.extract({'id': '5', 'scope': 'foo'})
         self.assertEqual(5, arguments.id)
-        self.assertEqual(u'foo', arguments.scope)
+        self.assertEqual('foo', arguments.scope)
 
     def test_extend_maintains_existing_attributes(self):
         """
@@ -996,9 +996,9 @@ class SchemaTestCase(TestCase):
         self.assertEqual(result, schema2.result)
         self.assertEqual(set(errors), schema2.errors)
 
-        arguments, _ = schema2.extract({'id': '5', 'scope': u'foo'})
+        arguments, _ = schema2.extract({'id': '5', 'scope': 'foo'})
         self.assertEqual(5, arguments.id)
-        self.assertEqual(u'foo', arguments.scope)
+        self.assertEqual('foo', arguments.scope)
 
     def test_extend_result(self):
         """
@@ -1009,8 +1009,8 @@ class SchemaTestCase(TestCase):
             result={'id': Integer()})
         result_structure = Structure(fields=schema2.result)
         self.assertEqual(
-            {'name': u'foo', 'id': 5},
-            result_structure.coerce({'name': u'foo', 'id': '5'}))
+            {'name': 'foo', 'id': 5},
+            result_structure.coerce({'name': 'foo', 'id': '5'}))
 
     def test_extend_errors(self):
         """

@@ -108,15 +108,15 @@ class _ChangeRRSet(object):
 
 
 def create_rrset(rrset):
-    return _ChangeRRSet(u"CREATE", rrset)
+    return _ChangeRRSet("CREATE", rrset)
 
 
 def delete_rrset(rrset):
-    return _ChangeRRSet(u"DELETE", rrset)
+    return _ChangeRRSet("DELETE", rrset)
 
 
 def upsert_rrset(rrset):
-    return _ChangeRRSet(u"UPSERT", rrset)
+    return _ChangeRRSet("UPSERT", rrset)
 
 
 @provider(IResourceRecordLoader)
@@ -183,7 +183,7 @@ class MX(object):
 
 
     def to_text(self):
-        return u"{} {}".format(self.preference, self.name)
+        return "{} {}".format(self.preference, self.name)
 
 
 
@@ -221,15 +221,15 @@ def _split_quoted(text):
         if escaped:
             escaped = False
             result.append(ch)
-        elif ch == u'\\':
+        elif ch == '\\':
             escaped = True
-        elif ch == u'"':
+        elif ch == '"':
             quoted = not quoted
-        elif not quoted and ch == u' ':
-            return u"".join(result), text[i:].lstrip()
+        elif not quoted and ch == ' ':
+            return "".join(result), text[i:].lstrip()
         else:
             result.append(ch)
-    return u"".join(result), u""
+    return "".join(result), ""
 
 
 
@@ -284,10 +284,10 @@ class NAPTR(object):
 
     def to_text(self):
         replacement = self.replacement
-        if replacement == Name(u"."):
-            replacement = u"."
+        if replacement == Name("."):
+            replacement = "."
 
-        return u"{} {} {} {} {} {}".format(
+        return "{} {} {} {} {} {}".format(
             self.order, self.preference,
             _quote(self.flag),
             _quote(self.service),
@@ -380,7 +380,7 @@ class TXT(object):
 
 
     def to_text(self):
-        return u" ".join(
+        return " ".join(
             _quote(value)
             for value
             in self.texts
@@ -415,7 +415,7 @@ class SOA(object):
         )
 
     def to_text(self):
-        return u"{mname} {rname} {serial} {refresh} {retry} {expire} {minimum}".format(
+        return "{mname} {rname} {serial} {refresh} {retry} {expire} {minimum}".format(
             **attr.asdict(self, recurse=False)
         )
 

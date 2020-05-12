@@ -53,11 +53,11 @@ class URLContextTests(TestCase):
         L{url_context} constructs a L{_URLContext} with its parameters.
         """
         params = dict(
-            scheme=u"https",
-            host=u"example.invalid",
+            scheme="https",
+            host="example.invalid",
             port=80,
-            path=[u"foo"],
-            query=[(u"bar", u"baz")],
+            path=["foo"],
+            query=[("bar", "baz")],
         )
         self.assertEqual(
             _URLContext(**params),
@@ -375,11 +375,11 @@ class QueryTestCase(TestCase):
         be signed according to the AWS SigV4 rules.
         """
         url_context = base.url_context(
-            scheme=u"https",
-            host=u"example.invalid",
+            scheme="https",
+            host="example.invalid",
             port=443,
-            path=[u"foo", u"bar"],
-            query=[(u"baz",), (u"quux", u"thud")],
+            path=["foo", "bar"],
+            query=[("baz",), ("quux", "thud")],
         )
         content_sha256 = sha256(b"random whatever").hexdigest().decode("ascii")
         details = RequestDetails(
@@ -409,7 +409,7 @@ class QueryTestCase(TestCase):
             )),
             attr.asdict(query._canonical_request(Headers({
                 b"host": [b"example.invalid"],
-                u"x-amz-date": [b"20090213T233130Z"],
+                "x-amz-date": [b"20090213T233130Z"],
             }))),
         )
 
@@ -419,8 +419,8 @@ class QueryTestCase(TestCase):
         by the query's credentials and request details.
         """
         url_context = base.url_context(
-            scheme=u"https",
-            host=u"example.invalid",
+            scheme="https",
+            host="example.invalid",
             port=443,
             path=[],
         )

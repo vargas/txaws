@@ -86,7 +86,7 @@ def s3_integration_tests(get_client):
                 1, len(created),
                 "Expected to find created object in listing {}".format(objects),
             )
-            self.assertEqual(objects.is_truncated, u"false")
+            self.assertEqual(objects.is_truncated, "false")
 
             self.assertEqual(str(len(object_data)), created[0].size)
 
@@ -115,9 +115,9 @@ def s3_integration_tests(get_client):
             d = client.create_bucket(bucket_name)
             def created_bucket(ignored):
                 return gatherResults([
-                    client.put_object(bucket_name, u"b"),
-                    client.put_object(bucket_name, u"a"),
-                    client.put_object(bucket_name, u"c"),
+                    client.put_object(bucket_name, "b"),
+                    client.put_object(bucket_name, "a"),
+                    client.put_object(bucket_name, "c"),
             ])
             d.addCallback(created_bucket)
             def created_objects(ignored):
@@ -125,7 +125,7 @@ def s3_integration_tests(get_client):
             d.addCallback(created_objects)
             def got_objects(listing):
                 self.assertEqual(
-                    [u"a", u"b", u"c"],
+                    ["a", "b", "c"],
                     list(item.key for item in listing.contents),
                 )
             d.addCallback(got_objects)
@@ -140,8 +140,8 @@ def s3_integration_tests(get_client):
             bucket_name = str(uuid4())
             client = get_client(self)
             yield client.create_bucket(bucket_name)
-            yield client.put_object(bucket_name, u"a", b"foo")
-            yield client.put_object(bucket_name, u"b", b"bar")
+            yield client.put_object(bucket_name, "a", b"foo")
+            yield client.put_object(bucket_name, "b", b"bar")
 
             objects = yield client.get_bucket(bucket_name, prefix=b"a")
             self.assertEqual([b"a"], list(obj.key for obj in objects.contents))
@@ -186,7 +186,7 @@ def s3_integration_tests(get_client):
             d.addCallback(put_objects)
             def got_objects(listing):
                 self.assertEqual(2, len(listing.contents))
-                self.assertEqual(listing.is_truncated, u"true")
+                self.assertEqual(listing.is_truncated, "true")
             d.addCallback(got_objects)
             return d
 
@@ -207,11 +207,11 @@ def s3_integration_tests(get_client):
                 ))
             d.addCallback(created_bucket)
             def created_objects(ignored):
-                return client.get_bucket(bucket_name, marker=u"0")
+                return client.get_bucket(bucket_name, marker="0")
             d.addCallback(created_objects)
             def got_objects(listing):
-                self.assertEqual(listing.marker, u"0")
-                self.assertEqual(u"1", listing.contents[0].key)
+                self.assertEqual(listing.marker, "0")
+                self.assertEqual("1", listing.contents[0].key)
             d.addCallback(got_objects)
             return d
 
@@ -315,7 +315,7 @@ def s3_integration_tests(get_client):
             object_names = [
                 b'object:with:colons',
                 b'object with spaces',
-                u'\N{SNOWMAN}'.encode('utf-8'),
+                '\N{SNOWMAN}'.encode('utf-8'),
                 ]
             object_data = b'some text'
             object_type = b'application/x-txaws-integration-testing'

@@ -134,7 +134,7 @@ class S3Client(BaseClient):
     def _headers(self, content_type):
         if content_type is None:
             return Headers()
-        return Headers({u"content-type": [content_type]})
+        return Headers({"content-type": [content_type]})
 
 
     def list_buckets(self):
@@ -844,9 +844,9 @@ def s3_url_context(service_endpoint, bucket=None, object_name=None):
     # `?acl=`).
     def p(s):
         results = []
-        args = s.split(u"&")
+        args = s.split("&")
         for a in args:
-            pieces = a.split(u"=")
+            pieces = a.split("=")
             if len(pieces) == 1:
                 results.append((unquote(pieces[0]),))
             elif len(pieces) == 2:
@@ -858,26 +858,26 @@ def s3_url_context(service_endpoint, bucket=None, object_name=None):
     query = []
     path = []
     if bucket is None:
-        path.append(u"")
+        path.append("")
     else:
         if isinstance(bucket, bytes):
             bucket = bucket.decode("utf-8")
         path.append(bucket)
         if object_name is None:
-            path.append(u"")
+            path.append("")
         else:
             if isinstance(object_name, bytes):
                 object_name = object_name.decode("utf-8")
-            if u"?" in object_name:
-                object_name, query = object_name.split(u"?", 1)
+            if "?" in object_name:
+                object_name, query = object_name.split("?", 1)
                 query = p(query)
-            object_name_components = object_name.split(u"/")
-            if object_name_components[0] == u"":
+            object_name_components = object_name.split("/")
+            if object_name_components[0] == "":
                 object_name_components.pop(0)
             if object_name_components:
                 path.extend(object_name_components)
             else:
-                path.append(u"")
+                path.append("")
     return _S3URLContext(
         scheme=service_endpoint.scheme.decode("utf-8"),
         host=service_endpoint.get_host().decode("utf-8"),

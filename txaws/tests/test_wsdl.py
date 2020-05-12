@@ -184,7 +184,7 @@ class NodeItemTestCase(WsdlBaseTestCase):
         root = etree.fromstring("<foo/>")
         foo = schema.create(root)
         foo.bar.egg = "spam"
-        self.assertEqual("<foo><bar><egg>spam</egg></bar></foo>",
+        self.assertEqual(b"<foo><bar><egg>spam</egg></bar></foo>",
                          etree.tostring(schema.dump(foo)))
 
     def test_set_with_unknown_tag(self):
@@ -228,7 +228,7 @@ class NodeItemTestCase(WsdlBaseTestCase):
         root = etree.fromstring("<foo><bar>spam</bar></foo>")
         foo = schema.create(root)
         foo.bar = None
-        self.assertEqual("<foo/>", etree.tostring(schema.dump(foo)))
+        self.assertEqual(b"<foo/>", etree.tostring(schema.dump(foo)))
 
     def test_set_with_non_leaf_tag(self):
         """
@@ -251,7 +251,7 @@ class NodeItemTestCase(WsdlBaseTestCase):
         root = etree.fromstring("<foo><bar><egg>spam</egg></bar></foo>")
         foo = schema.create(root)
         foo.bar = None
-        self.assertEqual("<foo/>", etree.tostring(schema.dump(foo)))
+        self.assertEqual(b"<foo/>", etree.tostring(schema.dump(foo)))
 
     def test_set_with_sequence_tag(self):
         """
@@ -266,7 +266,7 @@ class NodeItemTestCase(WsdlBaseTestCase):
                                 "/foo>")
         foo = schema.create(root)
         foo.bar = None
-        self.assertEqual("<foo><bar/></foo>", etree.tostring(schema.dump(foo)))
+        self.assertEqual(b"<foo><bar/></foo>", etree.tostring(schema.dump(foo)))
 
     def test_set_with_required_non_leaf_tag(self):
         """
@@ -333,7 +333,7 @@ class SequenceSchemaTestCase(WsdlBaseTestCase):
         schema = SequenceSchema("foo", NodeSchema("item", [LeafSchema("bar")]))
         foo = SequenceItem(schema)
         foo.append().bar = "egg"
-        self.assertEqual("<foo><item><bar>egg</bar></item></foo>",
+        self.assertEqual(b"<foo><item><bar>egg</bar></item></foo>",
                          etree.tostring(schema.dump(foo)))
 
     def test_dump_with_many_items(self):
@@ -344,10 +344,10 @@ class SequenceSchemaTestCase(WsdlBaseTestCase):
         foo = SequenceItem(schema)
         foo.append().bar = "spam0"
         foo.append().bar = "spam1"
-        self.assertEqual("<foo>"
-                         "<item><bar>spam0</bar></item>"
-                         "<item><bar>spam1</bar></item>"
-                         "</foo>",
+        self.assertEqual(b"<foo>"
+                         b"<item><bar>spam0</bar></item>"
+                         b"<item><bar>spam1</bar></item>"
+                         b"</foo>",
                          etree.tostring(schema.dump(foo)))
 
 
@@ -418,10 +418,10 @@ class SequenceItemTestCase(WsdlBaseTestCase):
         foo = schema.create(root)
         foo.append().bar = "egg1"
         self.assertEqual("egg1", foo[1].bar)
-        self.assertEqual("<foo>"
-                         "<item><bar>egg0</bar></item>"
-                         "<item><bar>egg1</bar></item>"
-                         "</foo>",
+        self.assertEqual(b"<foo>"
+                         b"<item><bar>egg0</bar></item>"
+                         b"<item><bar>egg1</bar></item>"
+                         b"</foo>",
                          etree.tostring(schema.dump(foo)))
 
     def test_append_with_too_many_items(self):
@@ -450,7 +450,7 @@ class SequenceItemTestCase(WsdlBaseTestCase):
         foo = schema.create(root)
         del foo[0]
         self.assertEqual("egg1", foo[0].bar)
-        self.assertEqual("<foo><item><bar>egg1</bar></item></foo>",
+        self.assertEqual(b"<foo><item><bar>egg1</bar></item></foo>",
                          etree.tostring(schema.dump(foo)))
 
     def test_delitem_with_not_enough_items(self):
@@ -479,7 +479,7 @@ class SequenceItemTestCase(WsdlBaseTestCase):
         foo = schema.create(root)
         foo.remove(foo[0])
         self.assertEqual("egg1", foo[0].bar)
-        self.assertEqual("<foo><item><bar>egg1</bar></item></foo>",
+        self.assertEqual(b"<foo><item><bar>egg1</bar></item></foo>",
                          etree.tostring(schema.dump(foo)))
 
     def test_remove_with_non_existing_item(self):

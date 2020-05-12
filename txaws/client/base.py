@@ -205,10 +205,10 @@ def url_context(**kw):
     a query should be issued.
 
     @param scheme: The scheme portion of the URL, eg
-        ``u"http"`` or ``u"https"``.
+        ``"http"`` or ``"https"``.
     @type scheme: L{str}
 
-    @param host: The host portion of the URL, eg ``u"example.com"``.
+    @param host: The host portion of the URL, eg ``"example.com"``.
     @type host: L{str}
 
     @param port: A non-default port for the URL or ``None`` for the
@@ -345,7 +345,7 @@ class RequestDetails(object):
 
     @ivar amz_headers: AWS semantic key/value metadata to associate
         with the request.  For example, including the key
-        u"storage-class" will tell AWS S3 to provide some particular
+        "storage-class" will tell AWS S3 to provide some particular
         alternate storage guarantees for an S3 object.
     @type amz_headers: L{pmap}
 
@@ -490,7 +490,7 @@ class _Query(object):
 
         # Before we check if the content type is set, let's see if we can set
         # it by guessing the the mimetype.
-        content_types = app_headers.getRawHeaders(u"content-type", None)
+        content_types = app_headers.getRawHeaders("content-type", None)
         if content_types is not None:
             headers["content-type"] = content_types[0]
         return headers
@@ -537,23 +537,23 @@ class _Query(object):
         for k, v in extra_headers.iteritems():
             headers.setRawHeaders(k, [v])
 
-        if not headers.hasHeader(u"host"):
+        if not headers.hasHeader("host"):
             # XXX I'm not sure this is the right encoding for the
             # value in this context.  Headers.setRawHeaders would do
             # something different if we just gave it the str.
-            headers.setRawHeaders(u"host", [url_context.get_encoded_host()])
+            headers.setRawHeaders("host", [url_context.get_encoded_host()])
 
         if self._credentials is not None:
             self._log.info(
-                u"Computing authorization from "
-                u"{service} {region} {method} {url} {headers}",
+                "Computing authorization from "
+                "{service} {region} {method} {url} {headers}",
                 service=self._details.service,
                 region=self._details.region,
                 method=method,
                 url=url_context.get_encoded_url(),
                 headers=headers,
             )
-            headers.setRawHeaders(u"authorization", [self._sign(
+            headers.setRawHeaders("authorization", [self._sign(
                 instant,
                 self._credentials,
                 self._details.service,
@@ -563,7 +563,7 @@ class _Query(object):
 
         url = url_context.get_encoded_url()
         self._log.info(
-            u"Submitting query: {method} {url} {headers}",
+            "Submitting query: {method} {url} {headers}",
             method=method,
             url=url,
             headers=headers,

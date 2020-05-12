@@ -22,40 +22,40 @@ def cleanup_route53():
             delete_hosted_zone(route53, zone)
         except Exception as e:
             print("Failed to delete Route53 hosted zone {}: {}".format(
-                zone[u"Name"], e
+                zone["Name"], e
             ))
         else:
-            print("Deleted Route53 zone {}".format(zone[u"Name"]))
+            print("Deleted Route53 zone {}".format(zone["Name"]))
 
 
 def all_hosted_zones(route53):
-    return route53.list_hosted_zones()[u"HostedZones"]
+    return route53.list_hosted_zones()["HostedZones"]
 
 
 def delete_hosted_zone(route53, zone):
     delete_all_rrsets(route53, zone)
-    route53.delete_hosted_zone(Id=zone[u"Id"])
+    route53.delete_hosted_zone(Id=zone["Id"])
 
 
 def delete_all_rrsets(route53, zone):
-    rrsets = route53.list_resource_record_sets(HostedZoneId=zone[u"Id"])[u"ResourceRecordSets"]
+    rrsets = route53.list_resource_record_sets(HostedZoneId=zone["Id"])["ResourceRecordSets"]
     changes = list(
-        {u"Action": u"DELETE", u"ResourceRecordSet": rrset}
+        {"Action": "DELETE", "ResourceRecordSet": rrset}
         for rrset in rrsets
-        if rrset[u"Type"] != u"SOA"
-        and not (rrset[u"Type"] == u"NS" and rrset[u"Name"] == zone[u"Name"])
+        if rrset["Type"] != "SOA"
+        and not (rrset["Type"] == "NS" and rrset["Name"] == zone["Name"])
     )
     if len(changes):
         route53.change_resource_record_sets(
-            HostedZoneId=zone[u"Id"],
+            HostedZoneId=zone["Id"],
             ChangeBatch={
-                u"Comment": u"cleanup-aws",
-                u"Changes": changes,
+                "Comment": "cleanup-aws",
+                "Changes": changes,
             },
         )
-        print("Deleted Route53 zone {}'s {} rrsets".format(zone[u"Name"], len(rrsets)))
+        print("Deleted Route53 zone {}'s {} rrsets".format(zone["Name"], len(rrsets)))
     else:
-        print("Route53 zone {} has no rrsets to delete".format(zone[u"Name"]))
+        print("Route53 zone {} has no rrsets to delete".format(zone["Name"]))
 
 
 def cleanup_s3():
@@ -73,9 +73,9 @@ def all_buckets(s3):
     # Apparently pagination isn't required for buckets - perhaps
     # because the default limit on number of buckets is so low.
     return (
-        bucket[u"Name"]
+        bucket["Name"]
         for bucket
-        in s3.list_buckets()[u"Buckets"]
+        in s3.list_buckets()["Buckets"]
     )
 
 
@@ -87,7 +87,7 @@ def delete_bucket(s3, bucket):
 def delete_objects(s3, bucket):
     keys = []
     for obj in list_objects(s3, bucket):
-        keys.append(obj[u"Key"])
+        keys.append(obj["Key"])
         if len(keys) == 1000:
             delete_some_objects(s3, bucket, keys)
             keys = []
@@ -101,7 +101,7 @@ def list_objects(s3, bucket):
     return (
         content
         for page in result
-        for content in page.get(u"Contents", [])
+        for content in page.get("Contents", [])
     )
 
 
@@ -111,7 +111,7 @@ def delete_some_objects(s3, bucket, keys):
         Bucket=bucket,
         Delete={
             'Objects': list(
-                {u"Key": key}
+                {"Key": key}
                 for key in keys
             ),
         },

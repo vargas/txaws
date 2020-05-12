@@ -21,7 +21,7 @@ def ec2_integration_tests(get_client):
             client = get_client(self)
             # TODO: Make it so this test could possibly pass against the real
             # implementation.
-            output = yield client.get_console_output(u"i-abcdefghijklmnop")
+            output = yield client.get_console_output("i-abcdefghijklmnop")
             self.assertIsInstance(output, ConsoleOutput)
 
     return EC2IntegrationTests

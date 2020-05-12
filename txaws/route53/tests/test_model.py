@@ -45,8 +45,8 @@ class BasicResourceRecordTestCase(TestCase):
         self._test_roundtrip(
             SOA,
             SOA(
-                mname=Name(u"ns-857.example.invalid."),
-                rname=Name(u"awsdns-hostmaster.example.invalid."),
+                mname=Name("ns-857.example.invalid."),
+                rname=Name("awsdns-hostmaster.example.invalid."),
                 serial=1,
                 refresh=7200,
                 retry=900,
@@ -69,7 +69,7 @@ class BasicResourceRecordTestCase(TestCase):
         """
         self._test_roundtrip(
             NS,
-            NS(nameserver=Name(u"ns1.example.invalid.")),
+            NS(nameserver=Name("ns1.example.invalid.")),
             XML(self._ns_xml),
         )
 
@@ -86,7 +86,7 @@ class BasicResourceRecordTestCase(TestCase):
         """
         self._test_roundtrip(
             CNAME,
-            CNAME(canonical_name=Name(u"sub.example.invalid.")),
+            CNAME(canonical_name=Name("sub.example.invalid.")),
             XML(self._cname_xml),
         )
 
@@ -103,6 +103,6 @@ class BasicResourceRecordTestCase(TestCase):
         """
         self._test_roundtrip(
             A,
-            A(address=IPv4Address(u"1.2.3.4")),
+            A(address=IPv4Address("1.2.3.4")),
             XML(self._a_xml),
         )
