@@ -650,7 +650,7 @@ class SchemaTestCase(TestCase):
         """
         schema = Schema(Unicode("name"))
         params = schema.bundle(name="foo")
-        self.assertEqual({"name": "foo"}, params)
+        self.assertEqual({"name": b"foo"}, params)
 
     def test_bundle_with_numbered(self):
         """
@@ -658,7 +658,7 @@ class SchemaTestCase(TestCase):
         """
         schema = Schema(Unicode("name.n"))
         params = schema.bundle(name=["foo", "bar"])
-        self.assertEqual({"name.1": "foo", "name.2": "bar"}, params)
+        self.assertEqual({"name.1": b"foo", "name.2": b"bar"}, params)
 
     def test_bundle_with_two_numbered(self):
         """
@@ -666,8 +666,8 @@ class SchemaTestCase(TestCase):
         """
         schema = Schema(Unicode("names.n"), Unicode("things.n"))
         params = schema.bundle(names=["foo", "bar"], things=["baz", "quux"])
-        self.assertEqual({"names.1": "foo", "names.2": "bar",
-                          "things.1": "baz", "things.2": "quux"},
+        self.assertEqual({"names.1": b"foo", "names.2": b"bar",
+                          "things.1": b"baz", "things.2": b"quux"},
                          params)
 
     def test_bundle_with_none(self):
@@ -698,7 +698,7 @@ class SchemaTestCase(TestCase):
         """
         schema = Schema(Unicode("name.n"), Integer("count"))
         params = schema.bundle(name=["Foo", "Bar"], count=123)
-        self.assertEqual({"name.1": "Foo", "name.2": "Bar", "count": "123"},
+        self.assertEqual({"name.1": b"Foo", "name.2": b"Bar", "count": b"123"},
                          params)
 
     def test_bundle_with_structure(self):
@@ -708,14 +708,14 @@ class SchemaTestCase(TestCase):
                 Structure("struct", fields={"field1": Unicode(),
                                             "field2": Integer()})])
         params = schema.bundle(struct={"field1": "hi", "field2": 59})
-        self.assertEqual({"struct.field1": "hi", "struct.field2": "59"},
+        self.assertEqual({"struct.field1": b"hi", "struct.field2": b"59"},
                          params)
 
     def test_bundle_with_list(self):
         """L{Schema.bundle} can bundle L{List}s."""
         schema = Schema(parameters=[List("things", item=Unicode())])
         params = schema.bundle(things=["foo", "bar"])
-        self.assertEqual({"things.1": "foo", "things.2": "bar"}, params)
+        self.assertEqual({"things.1": b"foo", "things.2": b"bar"}, params)
 
     def test_bundle_with_structure_with_arguments(self):
         """
@@ -727,14 +727,14 @@ class SchemaTestCase(TestCase):
                                             "field2": Integer()})])
         params = schema.bundle(struct=Arguments({"field1": "hi",
                                                  "field2": 59}))
-        self.assertEqual({"struct.field1": "hi", "struct.field2": "59"},
+        self.assertEqual({"struct.field1": b"hi", "struct.field2": b"59"},
                          params)
 
     def test_bundle_with_list_with_arguments(self):
         """L{Schema.bundle} can bundle L{List}s (specified as L{Arguments})."""
         schema = Schema(parameters=[List("things", item=Unicode())])
         params = schema.bundle(things=Arguments({1: "foo", 2: "bar"}))
-        self.assertEqual({"things.1": "foo", "things.2": "bar"}, params)
+        self.assertEqual({"things.1": b"foo", "things.2": b"bar"}, params)
 
     def test_bundle_with_arguments(self):
         """L{Schema.bundle} can bundle L{Arguments} too."""
@@ -742,7 +742,7 @@ class SchemaTestCase(TestCase):
         arguments = Arguments({"name": Arguments({1: "Foo", 7: "Bar"}),
                                "count": 123})
         params = schema.bundle(arguments)
-        self.assertEqual({"name.1": "Foo", "name.7": "Bar", "count": "123"},
+        self.assertEqual({"name.1": b"Foo", "name.7": b"Bar", "count": b"123"},
                          params)
 
     def test_bundle_with_arguments_and_extra(self):
@@ -754,7 +754,7 @@ class SchemaTestCase(TestCase):
         schema = Schema(Unicode("name.n"), Integer("count"))
         arguments = Arguments({"name": {1: "Foo", 7: "Bar"}, "count": 321})
         params = schema.bundle(arguments, count=123)
-        self.assertEqual({"name.1": "Foo", "name.2": "Bar", "count": "123"},
+        self.assertEqual({"name.1": b"Foo", "name.2": b"Bar", "count": b"123"},
                          params)
 
     def test_bundle_with_missing_parameter(self):

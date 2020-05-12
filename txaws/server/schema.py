@@ -131,7 +131,8 @@ class Parameter:
             return parsed
         except ValueError:
             try:
-                value = value.decode("utf-8")
+                if isinstance(value, bytes):
+                    value = value.decode("utf-8")
                 message = "Invalid %s value %s" % (self.kind, value)
             except UnicodeDecodeError:
                 message = "Invalid %s value" % self.kind
@@ -183,7 +184,9 @@ class Unicode(Parameter):
     greater_than_max_template = "Length exceeds maximum of %s."
 
     def parse(self, value):
-        return value.decode("utf-8")
+        if isinstance(value, bytes):
+            return value.decode("utf-8")
+        return value
 
     def format(self, value):
         return value.encode("utf-8")
