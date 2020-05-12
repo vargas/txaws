@@ -248,7 +248,7 @@ class _URLContext:
     path = attr.ib(validator=_list_of(validators.instance_of(str)))
     query = attr.ib(
         default=attr.Factory(list),
-        convert=_tuples_to_queryarg,
+        converter=_tuples_to_queryarg,
         validator=_list_of(validators.instance_of(_QueryArgument)),
     )
 
@@ -371,12 +371,12 @@ class RequestDetails:
     )
     metadata = attr.ib(
         default=pmap(),
-        convert=freeze,
+        converter=freeze,
         validator=validators.instance_of(PMap),
     )
     amz_headers = attr.ib(
         default=pmap(),
-        convert=freeze,
+        converter=freeze,
         validator=validators.instance_of(PMap),
     )
     content_sha256 = attr.ib(

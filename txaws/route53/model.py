@@ -25,7 +25,7 @@ from txaws.client._validators import set_of
 @attr.s(frozen=True)
 class Name:
     text = attr.ib(
-        convert=lambda v: v + "." if not v.endswith(".") else v,
+        converter=lambda v: v + "." if not v.endswith(".") else v,
         validator=validators.instance_of(str),
     )
 
@@ -365,7 +365,7 @@ class SRV:
 @attr.s(frozen=True)
 class TXT:
     texts = attr.ib(
-        convert=tuple,
+        converter=tuple,
         validator=validators.instance_of(tuple),
     )
 

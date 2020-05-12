@@ -232,7 +232,7 @@ class UnicodeTestCase(TestCase):
         parameter = Unicode("Test")
         value = parameter.format("fo\N{TAGBANWA LETTER SA}")
         self.assertEqual(b"fo\xe1\x9d\xb0", value)
-        self.assertTrue(isinstance(value, str))
+        self.assertTrue(isinstance(value, bytes))
 
     def test_min_and_max(self):
         """The L{Unicode} parameter properly supports ranges."""
