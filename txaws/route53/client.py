@@ -25,8 +25,8 @@ from txaws.client.base import RequestDetails, url_context, query, error_wrapper
 from txaws.service import REGION_US_EAST_1, AWSServiceEndpoint
 from txaws.util import XML
 
-from ._util import bytes_to_str, to_xml, tags
-from .model import (
+from txaws.route53._util import bytes_to_str, to_xml, tags
+from txaws.route53.model import (
     HostedZone, RRSetType, RRSetKey, RRSet, AliasRRSet, Name, SOA, NS, A, CNAME,
     AAAA, MX, NAPTR, PTR, SPF, SRV, TXT, UnknownRecordType,
 )

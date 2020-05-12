@@ -1,14 +1,16 @@
-# -*- coding: utf-8 -*-
 import hmac
-import urllib
 import base64
+import warnings
+import mimetypes
 from hashlib import sha256
-from urllib import quote, quote_plus
+from urllib.parse import quote, quote_plus
 from datetime import datetime
 
-from txaws.util import hmac_sha256, get_utf8_value
+from twisted.web.http import datetimeToString
+
+from txaws import _auth_v4
 from txaws.client.base import BaseClient, BaseQuery
-from txaws.service import AWSServiceEndpoint
+from txaws.service import AWSServiceEndpoint, REGION_US_EAST_1, SQS_ENDPOINT
 from txaws.sqs.connection import SQSConnection
 from txaws.sqs.errors import RequestParamError
 from txaws.sqs.parser import (empty_check,
@@ -21,6 +23,217 @@ from txaws.sqs.parser import (empty_check,
                               parse_create_queue,
                               parse_queue_attributes)
 
+class Query(BaseQuery):
+    """A query for submission to the S3 service."""
+
+    def __init__(self, bucket=None, object_name=None, data="",
+                 content_type=None, metadata={}, amz_headers={},
+                 body_producer=None, *args, **kwargs):
+        super(Query, self).__init__(*args, **kwargs)
+
+        # data might be None or "", alas.
+        if data and body_producer is not None:
+            raise ValueError("data and body_producer are mutually exclusive.")
+
+        self.bucket = bucket
+        self.object_name = object_name
+        self.data = data
+        self.body_producer = body_producer
+        self.content_type = content_type
+        self.metadata = metadata
+        self.amz_headers = amz_headers
+        self._date = datetimeToString()
+        if not self.endpoint or not self.endpoint.host:
+            self.endpoint = AWSServiceEndpoint(S3_ENDPOINT)
+        self.endpoint.set_method(self.action)
+
+    @property
+    def date(self):
+        """
+        Return the date and emit a deprecation warning.
+        """
+        warnings.warn("txaws.s3.client.Query.date is a deprecated attribute",
+                      DeprecationWarning,
+                      stacklevel=2)
+        return self._date
+
+    @date.setter
+    def date(self, value):
+        """
+        Set the date.
+
+        @param value: The new date for this L{Query}.
+        @type value: L{str}
+        """
+        self._date = value
+
+    def set_content_type(self):
+        """
+        Set the content type based on the file extension used in the object
+        name.
+        """
+        if self.object_name and not self.content_type:
+            # XXX nothing is currently done with the encoding... we may
+            # need to in the future
+            self.content_type, encoding = mimetypes.guess_type(
+                self.object_name, strict=False)
+
+    def get_headers(self, instant):
+        """
+        Build the list of headers needed in order to perform S3 operations.
+        """
+        headers = {'x-amz-date': _auth_v4.makeAMZDate(instant)}
+        if self.body_producer is None:
+            data = self.data
+            if data is None:
+                data = b""
+            headers["x-amz-content-sha256"] = sha256(data).hexdigest()
+        else:
+            data = None
+            headers["x-amz-content-sha256"] = b"UNSIGNED-PAYLOAD"
+        for key, value in self.metadata.iteritems():
+            headers["x-amz-meta-" + key] = value
+        for key, value in self.amz_headers.iteritems():
+            headers["x-amz-" + key] = value
+
+        # Before we check if the content type is set, let's see if we can set
+        # it by guessing the the mimetype.
+        self.set_content_type()
+        if self.content_type is not None:
+            headers["Content-Type"] = self.content_type
+        if self.creds is not None:
+            headers["Authorization"] = self.sign(
+                headers,
+                data,
+                sqs_url_context(self.endpoint),
+                instant,
+                method=self.action)
+        return headers
+
+    def sign(self, headers, data, url_context, instant, method,
+             region=REGION_US_EAST_1):
+        """Sign this query using its built in credentials."""
+        headers["host"] = url_context.get_encoded_host()
+
+        if data is None:
+            request = _auth_v4._CanonicalRequest.from_request_components(
+                method=method,
+                url=url_context.get_encoded_path(),
+                headers=headers,
+                headers_to_sign=('host', 'x-amz-date'),
+                payload_hash=None,
+            )
+        else:
+            request = _auth_v4._CanonicalRequest.from_request_components_and_payload(
+                method=method,
+                url=url_context.get_encoded_path(),
+                headers=headers,
+                headers_to_sign=('host', 'x-amz-date'),
+                payload=data,
+            )
+
+        return _auth_v4._make_authorization_header(
+            region=region,
+            service="sqs",
+            canonical_request=request,
+            credentials=self.creds,
+            instant=instant)
+
+    def submit(self, url_context=None, utcnow=datetime.datetime.utcnow):
+        """Submit this query.
+
+        @return: A deferred from get_page
+        """
+        if not url_context:
+            url_context = sqs_url_context(
+                self.endpoint, self.bucket, self.object_name)
+        d = self.get_page(
+            url_context.get_encoded_url(),
+            method=self.action,
+            postdata=self.data or b"",
+            headers=self.get_headers(utcnow()),
+        )
+
+        return d.addErrback(s3_error_wrapper)
+
+def sqs_url_context(service_endpoint):
+    """
+    Create a URL based on the given service endpoint and suitable for
+    the given bucket or object.
+
+    @param service_endpoint: The service endpoint on which to base the
+        resulting URL.
+    @type service_endpoint: L{AWSServiceEndpoint}
+
+    @param bucket: If given, the name of a bucket to reference.
+    @type bucket: L{str}
+
+    @param object_name: If given, the name of an object or object
+        subresource to reference.
+    @type object_name: L{str}
+    """
+
+    # Define our own query parser which can handle the consequences of
+    # `?acl` and such (subresources).  At its best, parse_qsl doesn't
+    # let us differentiate between these and empty values (such as
+    # `?acl=`).
+    def p(s):
+        results = []
+        args = s.split(u"&")
+        for a in args:
+            pieces = a.split(u"=")
+            if len(pieces) == 1:
+                results.append((unquote(pieces[0]),))
+            elif len(pieces) == 2:
+                results.append(tuple(map(unquote, pieces)))
+            else:
+                raise Exception("oh no")
+        return results
+
+    query = []
+    path = []
+    if bucket is None:
+        path.append(u"")
+    else:
+        if isinstance(bucket, bytes):
+            bucket = bucket.decode("utf-8")
+        path.append(bucket)
+        if object_name is None:
+            path.append(u"")
+        else:
+            if isinstance(object_name, bytes):
+                object_name = object_name.decode("utf-8")
+            if u"?" in object_name:
+                object_name, query = object_name.split(u"?", 1)
+                query = p(query)
+            object_name_components = object_name.split(u"/")
+            if object_name_components[0] == u"":
+                object_name_components.pop(0)
+            if object_name_components:
+                path.extend(object_name_components)
+            else:
+                path.append(u"")
+    return _SQSURLContext(
+        scheme=service_endpoint.scheme.decode("utf-8"),
+        host=service_endpoint.get_host().decode("utf-8"),
+        port=service_endpoint.port,
+        path=path,
+        query=query,
+    )
+
+
+class _SQSURLContext(_URLContext):
+    # Backwards compatibility layer.  For deprecation.  s3_url_context
+    # should just return an _URLContext and application code should
+    # interact with that interface.
+    def get_host(self):
+        return self.get_encoded_host()
+
+    def get_path(self):
+        return self.get_encoded_path()
+
+    def get_url(self):
+        return self.get_encoded_url()
 
 class QuerysSignatureV4(BaseQuery):
 
@@ -50,7 +263,7 @@ class QuerysSignatureV4(BaseQuery):
     def _hashed_canonical_request(self, q_str, params, canonical_headers):
         d = [
            self.endpoint.method.upper(),
-           urllib.quote(self.endpoint.path),
+           quote(self.endpoint.path),
            q_str,
            self._canonical_headers(canonical_headers),
            params['X-Amz-SignedHeaders'],
@@ -83,11 +296,11 @@ class QuerysSignatureV4(BaseQuery):
         ])
         query_params.sort(key=lambda x: x[0])
         params = dict(query_params)
-        query_string = urlencode_quote(query_params)
+        query_string = quote(query_params)
         hsh = self._hashed_canonical_request(query_string,
                                              params,
                                              canonical_headers)
-        query_string += '&' + urlencode_quote([('X-Amz-Signature',
+        query_string += '&' + quote([('X-Amz-Signature',
                                                self._signature(params,
                                                                hsh,
                                                                dt))])
@@ -119,7 +332,7 @@ class QuerySignatureV2(BaseQuery):
         self.endpoint = endpoint
 
     def _calculate_signature(self, query_params_list):
-        query_string = urlencode_quote(query_params_list)
+        query_string = quote(query_params_list)
         string_to_sign = '%s\n%s\n%s\n%s' % (
             self.endpoint.method, self.endpoint.host,
             self.endpoint.path, query_string
@@ -137,7 +350,7 @@ class QuerySignatureV2(BaseQuery):
         ])
         query_params.sort()
         query_params.append(('Signature', self._calculate_signature(query_params)))
-        query_string = urlencode_quote(query_params)
+        query_string = quote(query_params)
         return '%s?%s' % (self.endpoint.get_uri(), query_string)
 
     def submit(self, action, **params):
@@ -339,7 +552,7 @@ class Queue(object):
         params = {}
         prefix = 'ChangeMessageVisibilityBatchRequestEntry'
         if isinstance(timeout, int):
-            timeout = [timeout for i in xrange(len(receipt_handles))]
+            timeout = [timeout for i in range(len(receipt_handles))]
         for i, param in enumerate(zip(receipt_handles, timeout), start=1):
             params['{}.{}.Id'.format(prefix, i)] = i
             params['{}.{}.ReceiptHandle'.format(prefix, i)] = param[0]
@@ -492,7 +705,7 @@ class Queue(object):
             raise RequestParamError('More than 10 not allowed.')
         params = {}
         if isinstance(delay_seconds, int):
-            delay_seconds = [delay_seconds for i in xrange(len(messages))]
+            delay_seconds = [delay_seconds for i in range(len(messages))]
         prefix = 'SendMessageBatchRequestEntry'
 
         for i, msg in enumerate(messages, start=1):

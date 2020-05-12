@@ -6,35 +6,35 @@ Tests for L{txaws.route53._util}.
 
 from twisted.trial.unittest import TestCase
 
-from txaws.route53._util import maybe_bytes_to_str, to_xml, tags
+from txaws.route53._util import bytes_to_str, to_xml, tags
 
 
 class MaybeBytesToUnicodeTestCase(TestCase):
     """
-    Tests for L{maybe_bytes_to_str}.
+    Tests for L{bytes_to_str}.
     """
     def test_bytes(self):
         """
-        When called with an instance of L{bytes}, L{maybe_bytes_to_str}
+        When called with an instance of L{bytes}, L{bytes_to_str}
         decodes its input using I{ascii} and returns the resulting str
         string as an instance of L{str}.
         """
         self.assertRaises(
             UnicodeDecodeError,
-            lambda: maybe_bytes_to_str(u"\N{SNOWMAN}".encode("utf-8")),
+            lambda: bytes_to_str(u"\N{SNOWMAN}".encode("utf-8")),
         )
-        decoded = maybe_bytes_to_str(b"hello world")
+        decoded = bytes_to_str(b"hello world")
         self.assertIsInstance(decoded, str)
         self.assertEqual(decoded, u"hello world")
 
     def test_str(self):
         """
         When called with an instance of L{str},
-        L{maybe_bytes_to_str} returns its input unmodified.
+        L{bytes_to_str} returns its input unmodified.
         """
         self.assertEqual(
             u"\N{SNOWMAN}",
-            maybe_bytes_to_str(u"\N{SNOWMAN}"),
+            bytes_to_str(u"\N{SNOWMAN}"),
         )
 
 

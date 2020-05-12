@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import base64
 from collections import namedtuple
 
@@ -9,7 +8,7 @@ Message = namedtuple('Message', 'receipt, body')
 
 
 def empty_check(data):
-    if isinstance(data, basestring):
+    if isinstance(data, str):
         return True
 
 
