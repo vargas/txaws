@@ -231,7 +231,7 @@ class UnicodeTestCase(TestCase):
         """L{Unicode.format} encodes the given C{str} with utf-8."""
         parameter = Unicode("Test")
         value = parameter.format("fo\N{TAGBANWA LETTER SA}")
-        self.assertEqual("fo\xe1\x9d\xb0", value)
+        self.assertEqual(b"fo\xe1\x9d\xb0", value)
         self.assertTrue(isinstance(value, str))
 
     def test_min_and_max(self):
@@ -698,7 +698,7 @@ class SchemaTestCase(TestCase):
         """
         schema = Schema(Unicode("name.n"), Integer("count"))
         params = schema.bundle(name=["Foo", "Bar"], count=123)
-        self.assertEqual({"name.1": b"Foo", "name.2": b"Bar", "count": b"123"},
+        self.assertEqual({"name.1": b"Foo", "name.2": b"Bar", "count": "123"},
                          params)
 
     def test_bundle_with_structure(self):
@@ -708,7 +708,7 @@ class SchemaTestCase(TestCase):
                 Structure("struct", fields={"field1": Unicode(),
                                             "field2": Integer()})])
         params = schema.bundle(struct={"field1": "hi", "field2": 59})
-        self.assertEqual({"struct.field1": b"hi", "struct.field2": b"59"},
+        self.assertEqual({"struct.field1": b"hi", "struct.field2": "59"},
                          params)
 
     def test_bundle_with_list(self):
@@ -727,7 +727,7 @@ class SchemaTestCase(TestCase):
                                             "field2": Integer()})])
         params = schema.bundle(struct=Arguments({"field1": "hi",
                                                  "field2": 59}))
-        self.assertEqual({"struct.field1": b"hi", "struct.field2": b"59"},
+        self.assertEqual({"struct.field1": b"hi", "struct.field2": "59"},
                          params)
 
     def test_bundle_with_list_with_arguments(self):
@@ -742,7 +742,7 @@ class SchemaTestCase(TestCase):
         arguments = Arguments({"name": Arguments({1: "Foo", 7: "Bar"}),
                                "count": 123})
         params = schema.bundle(arguments)
-        self.assertEqual({"name.1": b"Foo", "name.7": b"Bar", "count": b"123"},
+        self.assertEqual({"name.1": b"Foo", "name.7": b"Bar", "count": "123"},
                          params)
 
     def test_bundle_with_arguments_and_extra(self):
@@ -754,7 +754,7 @@ class SchemaTestCase(TestCase):
         schema = Schema(Unicode("name.n"), Integer("count"))
         arguments = Arguments({"name": {1: "Foo", 7: "Bar"}, "count": 321})
         params = schema.bundle(arguments, count=123)
-        self.assertEqual({"name.1": b"Foo", "name.2": b"Bar", "count": b"123"},
+        self.assertEqual({"name.1": b"Foo", "name.2": b"Bar", "count": "123"},
                          params)
 
     def test_bundle_with_missing_parameter(self):

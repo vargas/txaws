@@ -485,7 +485,7 @@ class Arguments:
 
     def __iter__(self):
         """Returns an iterator yielding C{(name, value)} tuples."""
-        return self.__dict__.__iter__()
+        return list(self.__dict__.items()).__iter__()
 
     def __getitem__(self, index):
         """Return the argument value with the given L{index}."""

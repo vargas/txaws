@@ -519,13 +519,13 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_parse_create_key_pair_response(self):
         """Parse a CreateKeyPairResponse payload."""
         schema = self.schemas["CreateKeyPairResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
-        xml = ("<CreateKeyPairResponse xmlns=\"%s\">"
-               "<requestId>65d85081-abbc</requestId>"
-               "<keyName>foo</keyName>"
-               "<keyFingerprint>9a:81:96:46</keyFingerprint>"
-               "<keyMaterial>MIIEowIBAAKCAQEAi</keyMaterial>"
-               "</CreateKeyPairResponse>" % xmlns)
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xml = (b"<CreateKeyPairResponse xmlns=\"%s\">"
+               b"<requestId>65d85081-abbc</requestId>"
+               b"<keyName>foo</keyName>"
+               b"<keyFingerprint>9a:81:96:46</keyFingerprint>"
+               b"<keyMaterial>MIIEowIBAAKCAQEAi</keyMaterial>"
+               b"</CreateKeyPairResponse>" % xmlns)
 
         response = schema.create(etree.fromstring(xml))
         self.assertEqual("65d85081-abbc", response.requestId)
@@ -537,11 +537,11 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_parse_delete_key_pair_response(self):
         """Parse a DeleteKeyPairResponse payload."""
         schema = self.schemas["DeleteKeyPairResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
-        xml = ("<DeleteKeyPairResponse xmlns=\"%s\">"
-               "<requestId>acc41b73-4c47-4f80</requestId>"
-               "<return>true</return>"
-               "</DeleteKeyPairResponse>" % xmlns)
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xml = (b"<DeleteKeyPairResponse xmlns=\"%s\">"
+               b"<requestId>acc41b73-4c47-4f80</requestId>"
+               b"<return>true</return>"
+               b"</DeleteKeyPairResponse>" % xmlns)
         root = etree.fromstring(xml)
         response = schema.create(root)
         self.assertEqual("acc41b73-4c47-4f80", response.requestId)
@@ -551,16 +551,16 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_parse_describe_key_pairs_response(self):
         """Parse a DescribeKeyPairsResponse payload."""
         schema = self.schemas["DescribeKeyPairsResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
-        xml = ("<DescribeKeyPairsResponse xmlns=\"%s\">"
-               "<requestId>3ef0aa1d-57dd-4272</requestId>"
-               "<keySet>"
-               "<item>"
-               "<keyName>europe-key</keyName>"
-               "<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
-               "</item>"
-               "</keySet>"
-               "</DescribeKeyPairsResponse>" % xmlns)
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xml = (b"<DescribeKeyPairsResponse xmlns=\"%s\">"
+               b"<requestId>3ef0aa1d-57dd-4272</requestId>"
+               b"<keySet>"
+               b"<item>"
+               b"<keyName>europe-key</keyName>"
+               b"<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
+               b"</item>"
+               b"</keySet>"
+               b"</DescribeKeyPairsResponse>" % xmlns)
         root = etree.fromstring(xml)
         response = schema.create(root)
         self.assertEqual("3ef0aa1d-57dd-4272", response.requestId)
@@ -571,144 +571,144 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_modify_describe_key_pairs_response(self):
         """Modify a DescribeKeyPairsResponse payload."""
         schema = self.schemas["DescribeKeyPairsResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
-        xml = ("<DescribeKeyPairsResponse xmlns=\"%s\">"
-               "<requestId>3ef0aa1d-57dd-4272</requestId>"
-               "<keySet>"
-               "<item>"
-               "<keyName>europe-key</keyName>"
-               "<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
-               "</item>"
-               "</keySet>"
-               "</DescribeKeyPairsResponse>" % xmlns)
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xml = (b"<DescribeKeyPairsResponse xmlns=\"%s\">"
+               b"<requestId>3ef0aa1d-57dd-4272</requestId>"
+               b"<keySet>"
+               b"<item>"
+               b"<keyName>europe-key</keyName>"
+               b"<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
+               b"</item>"
+               b"</keySet>"
+               b"</DescribeKeyPairsResponse>" % xmlns)
         root = etree.fromstring(xml)
         response = schema.create(root)
         response.keySet[0].keyName = "new-key"
-        xml = ("<DescribeKeyPairsResponse xmlns=\"%s\">"
-               "<requestId>3ef0aa1d-57dd-4272</requestId>"
-               "<keySet>"
-               "<item>"
-               "<keyName>new-key</keyName>"
-               "<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
-               "</item>"
-               "</keySet>"
-               "</DescribeKeyPairsResponse>" % xmlns)
+        xml = (b"<DescribeKeyPairsResponse xmlns=\"%s\">"
+               b"<requestId>3ef0aa1d-57dd-4272</requestId>"
+               b"<keySet>"
+               b"<item>"
+               b"<keyName>new-key</keyName>"
+               b"<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
+               b"</item>"
+               b"</keySet>"
+               b"</DescribeKeyPairsResponse>" % xmlns)
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_key_pairs_response(self):
         """Create a DescribeKeyPairsResponse payload."""
         schema = self.schemas["DescribeKeyPairsResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "abc"
         key = response.keySet.append()
         key.keyName = "some-key"
         key.keyFingerprint = "11:22:33:44"
-        xml = ("<DescribeKeyPairsResponse xmlns=\"%s\">"
-               "<requestId>abc</requestId>"
-               "<keySet>"
-               "<item>"
-               "<keyName>some-key</keyName>"
-               "<keyFingerprint>11:22:33:44</keyFingerprint>"
-               "</item>"
-               "</keySet>"
-               "</DescribeKeyPairsResponse>" % xmlns)
+        xml = (b"<DescribeKeyPairsResponse xmlns=\"%s\">"
+               b"<requestId>abc</requestId>"
+               b"<keySet>"
+               b"<item>"
+               b"<keyName>some-key</keyName>"
+               b"<keyFingerprint>11:22:33:44</keyFingerprint>"
+               b"</item>"
+               b"</keySet>"
+               b"</DescribeKeyPairsResponse>" % xmlns)
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_addresses_response(self):
         """Create a DescribeAddressesResponse payload.
         """
         schema = self.schemas["DescribeAddressesResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "abc"
         address = response.addressesSet.append()
         address.publicIp = "192.168.0.1"
-        xml = ("<DescribeAddressesResponse xmlns=\"%s\">"
-               "<requestId>abc</requestId>"
-               "<addressesSet>"
-               "<item>"
-               "<publicIp>192.168.0.1</publicIp>"
-               "</item>"
-               "</addressesSet>"
-               "</DescribeAddressesResponse>" % xmlns)
+        xml = (b"<DescribeAddressesResponse xmlns=\"%s\">"
+               b"<requestId>abc</requestId>"
+               b"<addressesSet>"
+               b"<item>"
+               b"<publicIp>192.168.0.1</publicIp>"
+               b"</item>"
+               b"</addressesSet>"
+               b"</DescribeAddressesResponse>" % xmlns)
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_instances_response_with_username(self):
         """Create a DescribeInstancesResponse payload.
         """
         schema = self.schemas["DescribeInstancesResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "abc"
         reservation = response.reservationSet.append()
         instance = reservation.instancesSet.append()
         instance.instanceId = "i-01234567"
-        xml = ("<DescribeInstancesResponse xmlns=\"%s\">"
-               "<requestId>abc</requestId>"
-               "<reservationSet>"
-               "<item>"
-               "<instancesSet>"
-               "<item>"
-               "<instanceId>i-01234567</instanceId>"
-               "</item>"
-               "</instancesSet>"
-               "</item>"
-               "</reservationSet>"
-               "</DescribeInstancesResponse>" % xmlns)
+        xml = (b"<DescribeInstancesResponse xmlns=\"%s\">"
+               b"<requestId>abc</requestId>"
+               b"<reservationSet>"
+               b"<item>"
+               b"<instancesSet>"
+               b"<item>"
+               b"<instanceId>i-01234567</instanceId>"
+               b"</item>"
+               b"</instancesSet>"
+               b"</item>"
+               b"</reservationSet>"
+               b"</DescribeInstancesResponse>" % xmlns)
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_instances_response(self):
         """Create a DescribeInstancesResponse payload.
         """
         schema = self.schemas["DescribeInstancesResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "abc"
         reservation = response.reservationSet.append()
         instance = reservation.instancesSet.append()
         instance.instanceId = "i-01234567"
-        xml = ("<DescribeInstancesResponse xmlns=\"%s\">"
-               "<requestId>abc</requestId>"
-               "<reservationSet>"
-               "<item>"
-               "<instancesSet>"
-               "<item>"
-               "<instanceId>i-01234567</instanceId>"
-               "</item>"
-               "</instancesSet>"
-               "</item>"
-               "</reservationSet>"
-               "</DescribeInstancesResponse>" % xmlns)
+        xml = (b"<DescribeInstancesResponse xmlns=\"%s\">"
+               b"<requestId>abc</requestId>"
+               b"<reservationSet>"
+               b"<item>"
+               b"<instancesSet>"
+               b"<item>"
+               b"<instanceId>i-01234567</instanceId>"
+               b"</item>"
+               b"</instancesSet>"
+               b"</item>"
+               b"</reservationSet>"
+               b"</DescribeInstancesResponse>" % xmlns)
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_parse_describe_security_groups_response(self):
         """Parse a DescribeSecurityGroupsResponse payload."""
         schema = self.schemas["DescribeSecurityGroupsResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
-        xml = ("<DescribeSecurityGroupsResponse xmlns=\"%s\">"
-               "<requestId>3ef0aa1d-57dd-4272</requestId>"
-               "<securityGroupInfo>"
-               "<item>"
-               "<ownerId>UYY3TLBUXIEON5NQVUUX6OMPWBZIQNFM</ownerId>"
-               "<groupName>WebServers</groupName>"
-               "<groupDescription>Web</groupDescription>"
-               "<ipPermissions>"
-               "<item>"
-               "<ipProtocol>tcp</ipProtocol>"
-               "<fromPort>80</fromPort>"
-               "<toPort>80</toPort>"
-               "<groups/>"
-               "<ipRanges>"
-               "<item>"
-               "<cidrIp>0.0.0.0/0</cidrIp>"
-               "</item>"
-               "</ipRanges>"
-               "</item>"
-               "</ipPermissions>"
-               "</item>"
-               "</securityGroupInfo>"
-               "</DescribeSecurityGroupsResponse>" % xmlns)
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xml = (b"<DescribeSecurityGroupsResponse xmlns=\"%s\">"
+               b"<requestId>3ef0aa1d-57dd-4272</requestId>"
+               b"<securityGroupInfo>"
+               b"<item>"
+               b"<ownerId>UYY3TLBUXIEON5NQVUUX6OMPWBZIQNFM</ownerId>"
+               b"<groupName>WebServers</groupName>"
+               b"<groupDescription>Web</groupDescription>"
+               b"<ipPermissions>"
+               b"<item>"
+               b"<ipProtocol>tcp</ipProtocol>"
+               b"<fromPort>80</fromPort>"
+               b"<toPort>80</toPort>"
+               b"<groups/>"
+               b"<ipRanges>"
+               b"<item>"
+               b"<cidrIp>0.0.0.0/0</cidrIp>"
+               b"</item>"
+               b"</ipRanges>"
+               b"</item>"
+               b"</ipPermissions>"
+               b"</item>"
+               b"</securityGroupInfo>"
+               b"</DescribeSecurityGroupsResponse>" % xmlns)
         root = etree.fromstring(xml)
         response = schema.create(root)
         self.assertEqual("3ef0aa1d-57dd-4272", response.requestId)
@@ -721,78 +721,78 @@ class WDSLParserTestCase(WsdlBaseTestCase):
     def test_modify_describe_security_groups_response(self):
         """Modify a DescribeSecurityGroupsResponse payload."""
         schema = self.schemas["DescribeSecurityGroupsResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
-        xml = ("<DescribeSecurityGroupsResponse xmlns=\"%s\">"
-               "<requestId>3ef0aa1d-57dd-4272</requestId>"
-               "<securityGroupInfo>"
-               "<item>"
-               "<ownerId>UYY3TLBUXIEON5NQVUUX6OMPWBZIQNFM</ownerId>"
-               "<groupName>WebServers</groupName>"
-               "<groupDescription>Web</groupDescription>"
-               "<ipPermissions>"
-               "<item>"
-               "<ipProtocol>tcp</ipProtocol>"
-               "<fromPort>80</fromPort>"
-               "<toPort>80</toPort>"
-               "<groups/>"
-               "<ipRanges>"
-               "<item>"
-               "<cidrIp>0.0.0.0/0</cidrIp>"
-               "</item>"
-               "</ipRanges>"
-               "</item>"
-               "</ipPermissions>"
-               "</item>"
-               "</securityGroupInfo>"
-               "</DescribeSecurityGroupsResponse>" % xmlns)
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
+        xml = (b"<DescribeSecurityGroupsResponse xmlns=\"%s\">"
+               b"<requestId>3ef0aa1d-57dd-4272</requestId>"
+               b"<securityGroupInfo>"
+               b"<item>"
+               b"<ownerId>UYY3TLBUXIEON5NQVUUX6OMPWBZIQNFM</ownerId>"
+               b"<groupName>WebServers</groupName>"
+               b"<groupDescription>Web</groupDescription>"
+               b"<ipPermissions>"
+               b"<item>"
+               b"<ipProtocol>tcp</ipProtocol>"
+               b"<fromPort>80</fromPort>"
+               b"<toPort>80</toPort>"
+               b"<groups/>"
+               b"<ipRanges>"
+               b"<item>"
+               b"<cidrIp>0.0.0.0/0</cidrIp>"
+               b"</item>"
+               b"</ipRanges>"
+               b"</item>"
+               b"</ipPermissions>"
+               b"</item>"
+               b"</securityGroupInfo>"
+               b"</DescribeSecurityGroupsResponse>" % xmlns)
         root = etree.fromstring(xml)
         response = schema.create(root)
         response.securityGroupInfo[0].ownerId = "abc123"
         response.securityGroupInfo[0].groupName = "Everybody"
         response.securityGroupInfo[0].groupDescription = "All People"
-        xml = ("<DescribeSecurityGroupsResponse xmlns=\"%s\">"
-               "<requestId>3ef0aa1d-57dd-4272</requestId>"
-               "<securityGroupInfo>"
-               "<item>"
-               "<ownerId>abc123</ownerId>"
-               "<groupName>Everybody</groupName>"
-               "<groupDescription>All People</groupDescription>"
-               "<ipPermissions>"
-               "<item>"
-               "<ipProtocol>tcp</ipProtocol>"
-               "<fromPort>80</fromPort>"
-               "<toPort>80</toPort>"
-               "<groups/>"
-               "<ipRanges>"
-               "<item>"
-               "<cidrIp>0.0.0.0/0</cidrIp>"
-               "</item>"
-               "</ipRanges>"
-               "</item>"
-               "</ipPermissions>"
-               "</item>"
-               "</securityGroupInfo>"
-               "</DescribeSecurityGroupsResponse>" % xmlns)
+        xml = (b"<DescribeSecurityGroupsResponse xmlns=\"%s\">"
+               b"<requestId>3ef0aa1d-57dd-4272</requestId>"
+               b"<securityGroupInfo>"
+               b"<item>"
+               b"<ownerId>abc123</ownerId>"
+               b"<groupName>Everybody</groupName>"
+               b"<groupDescription>All People</groupDescription>"
+               b"<ipPermissions>"
+               b"<item>"
+               b"<ipProtocol>tcp</ipProtocol>"
+               b"<fromPort>80</fromPort>"
+               b"<toPort>80</toPort>"
+               b"<groups/>"
+               b"<ipRanges>"
+               b"<item>"
+               b"<cidrIp>0.0.0.0/0</cidrIp>"
+               b"</item>"
+               b"</ipRanges>"
+               b"</item>"
+               b"</ipPermissions>"
+               b"</item>"
+               b"</securityGroupInfo>"
+               b"</DescribeSecurityGroupsResponse>" % xmlns)
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_security_groups_response(self):
         """Create a DescribeSecurityGroupsResponse payload."""
         schema = self.schemas["DescribeSecurityGroupsResponse"]
-        xmlns = "http://ec2.amazonaws.com/doc/2008-12-01/"
+        xmlns = b"http://ec2.amazonaws.com/doc/2008-12-01/"
         response = schema.create(namespace=xmlns)
         response.requestId = "requestId123"
         group = response.securityGroupInfo.append()
         group.ownerId = "deadbeef31337"
         group.groupName = "hexadecimalonly"
         group.groupDescription = "All people that love hex"
-        xml = ("<DescribeSecurityGroupsResponse xmlns=\"%s\">"
-               "<requestId>requestId123</requestId>"
-               "<securityGroupInfo>"
-               "<item>"
-               "<ownerId>deadbeef31337</ownerId>"
-               "<groupName>hexadecimalonly</groupName>"
-               "<groupDescription>All people that love hex</groupDescription>"
-               "</item>"
-               "</securityGroupInfo>"
-               "</DescribeSecurityGroupsResponse>" % xmlns)
+        xml = (b"<DescribeSecurityGroupsResponse xmlns=\"%s\">"
+               b"<requestId>requestId123</requestId>"
+               b"<securityGroupInfo>"
+               b"<item>"
+               b"<ownerId>deadbeef31337</ownerId>"
+               b"<groupName>hexadecimalonly</groupName>"
+               b"<groupDescription>All people that love hex</groupDescription>"
+               b"</item>"
+               b"</securityGroupInfo>"
+               b"</DescribeSecurityGroupsResponse>" % xmlns)
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
