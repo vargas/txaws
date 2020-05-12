@@ -12,14 +12,14 @@ import attr
 import txaws.credentials
 
 
-class ControllerState(object):
+class ControllerState:
     def __get__(self, oself, type):
         return oself._controller.get_state(oself.creds)
 
 
 
 @attr.s
-class MemoryClient(object):
+class MemoryClient:
     _state = ControllerState()
 
     _controller = attr.ib()
@@ -27,7 +27,7 @@ class MemoryClient(object):
 
 
 @attr.s(frozen=True)
-class MemoryService(object):
+class MemoryService:
     """
     L{MemoryService} is the entrypoint into an in-memory implementation of a
     single AWS service.

@@ -38,7 +38,7 @@ class MemoryS3(MemoryService):
             state_factory=S3ClientState,
         )
 
-class S3ClientState(object):
+class S3ClientState:
     """
     ``S3ClientState`` instances hold the ``_MemoryS3Client`` instance
     state that is specific to testing and does not exist on
@@ -201,7 +201,7 @@ class _MemoryS3Client(MemoryClient):
 
 
 @attr.s
-class _MemoryConsumer(object):
+class _MemoryConsumer:
     _buffer = attr.ib(default=attr.Factory(list), repr=False)
 
     # Somehow we get away with a very incomplete IConsumer implementation.

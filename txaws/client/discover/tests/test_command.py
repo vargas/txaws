@@ -14,7 +14,7 @@ from txaws.client.discover.command import Command
 from txaws.ec2.client import Query
 
 
-class FakeHTTPClient(object):
+class FakeHTTPClient:
 
     def __init__(self, status, url):
         self.status = status

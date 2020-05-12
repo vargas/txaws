@@ -148,10 +148,10 @@ class S3URLContextTestCase(TestCase):
         )
 
 def mock_query_factory(response_body):
-    class Response(object):
+    class Response:
         responseHeaders = Headers()
 
-    class MockQuery(object):
+    class MockQuery:
         def __init__(self, credentials, details):
             self.__class__.credentials = credentials
             self.__class__.details = details

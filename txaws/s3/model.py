@@ -13,7 +13,7 @@ from txaws.util import XML
 
 
 @attr.s
-class Bucket(object):
+class Bucket:
     """
     An Amazon S3 storage bucket.
     """
@@ -22,7 +22,7 @@ class Bucket(object):
 
 
 @attr.s
-class ItemOwner(object):
+class ItemOwner:
     """
     The owner of a content item.
     """
@@ -31,7 +31,7 @@ class ItemOwner(object):
 
 
 @attr.s
-class BucketItem(object):
+class BucketItem:
     """
     The contents of an Amazon S3 bucket.
     """
@@ -47,7 +47,7 @@ class BucketItem(object):
 
 
 @attr.s
-class BucketListing(object):
+class BucketListing:
     """
     A mapping for the data in a bucket listing.
     """
@@ -60,7 +60,7 @@ class BucketListing(object):
     common_prefixes = attr.ib(default=None)
 
 
-class LifecycleConfiguration(object):
+class LifecycleConfiguration:
     """
     Returns the lifecycle configuration information set on the bucket.
     """
@@ -68,7 +68,7 @@ class LifecycleConfiguration(object):
         self.rules = rules
 
 
-class LifecycleConfigurationRule(object):
+class LifecycleConfigurationRule:
     """
     Container for elements that describe a lifecycle rule.
     """
@@ -79,7 +79,7 @@ class LifecycleConfigurationRule(object):
         self.expiration = expiration
 
 
-class WebsiteConfiguration(object):
+class WebsiteConfiguration:
     """
     A mapping for the data in a bucket website configuration.
     """
@@ -88,7 +88,7 @@ class WebsiteConfiguration(object):
         self.error_key = error_key
 
 
-class NotificationConfiguration(object):
+class NotificationConfiguration:
     """
     A mapping for the data in a bucket notification configuration.
     """
@@ -97,7 +97,7 @@ class NotificationConfiguration(object):
         self.event = event
 
 
-class VersioningConfiguration(object):
+class VersioningConfiguration:
     """
     Container for the bucket versioning configuration.
 
@@ -116,7 +116,7 @@ class VersioningConfiguration(object):
         self.status = status
 
 
-class FileChunk(object):
+class FileChunk:
     """
     An Amazon S3 file chunk.
 
@@ -125,7 +125,7 @@ class FileChunk(object):
     """
 
 
-class RequestPayment(object):
+class RequestPayment:
     """
     A payment request.
 
@@ -159,7 +159,7 @@ class RequestPayment(object):
         return cls(root.findtext("Payer"))
 
 
-class MultipartInitiationResponse(object):
+class MultipartInitiationResponse:
     """
     A response to Initiate Multipart Upload
     """
@@ -188,7 +188,7 @@ class MultipartInitiationResponse(object):
                    root.findtext('UploadId'))
 
 
-class MultipartCompletionResponse(object):
+class MultipartCompletionResponse:
     """
     Represents a response to Complete Multipart Upload
     """

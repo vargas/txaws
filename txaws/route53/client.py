@@ -89,7 +89,7 @@ RECORD_TYPES = {
 
 
 @attr.s(frozen=True)
-class _Route53Client(object):
+class _Route53Client:
     """
     @ivar agent: An agent to use to issue HTTP(S) requests.
     @type agent: L{IAgent} provider
@@ -347,7 +347,7 @@ def _route53_op(body=None, **kw):
     return d
 
 @attr.s
-class _Operation(object):
+class _Operation:
     """
     Supply the details necessary to make an API call.
 

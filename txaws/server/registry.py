@@ -1,7 +1,7 @@
 from txaws.server.exception import APIError
 
 
-class Registry(object):
+class Registry:
     """Register API L{Method}s. for handling specific actions and versions"""
 
     def __init__(self):

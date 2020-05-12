@@ -10,7 +10,7 @@ from twisted.web.iweb import UNKNOWN_LENGTH, IBodyProducer
 # Currently this is not released so here temporarily for forward compat.
 
 
-class FileBodyProducer(object):
+class FileBodyProducer:
     """
     L{FileBodyProducer} produces bytes from an input file object incrementally
     and writes them to a consumer.

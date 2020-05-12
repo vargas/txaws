@@ -472,7 +472,7 @@ class SQSClient(BaseClient):
         return body
 
 
-class Queue(object):
+class Queue:
     """
         Requests are made with path set to "/owner_id/queue_name/?...".
         Share with SQSClient creds and agent with HTTPConnectionPool.

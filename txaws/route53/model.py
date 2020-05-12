@@ -23,7 +23,7 @@ from txaws.route53.interface import IResourceRecordLoader, IBasicResourceRecord,
 from txaws.client._validators import set_of
 
 @attr.s(frozen=True)
-class Name(object):
+class Name:
     text = attr.ib(
         convert=lambda v: v + "." if not v.endswith(".") else v,
         validator=validators.instance_of(str),
@@ -34,7 +34,7 @@ class Name(object):
 
 
 @attr.s(frozen=True)
-class RRSetKey(object):
+class RRSetKey:
     label = attr.ib()
     type = attr.ib()
 
@@ -47,7 +47,7 @@ class RRSetType(Names):
 
 
 @attr.s(frozen=True)
-class RRSet(object):
+class RRSet:
     """
     https://tools.ietf.org/html/rfc2181#section-5
     http://docs.aws.amazon.com/Route53/latest/APIReference/API_ResourceRecord.html
@@ -74,7 +74,7 @@ class RRSet(object):
 
 
 @attr.s(frozen=True)
-class AliasRRSet(object):
+class AliasRRSet:
     """
     http://docs.aws.amazon.com/Route53/latest/APIReference/API_AliasTarget.html
 
@@ -101,7 +101,7 @@ class AliasRRSet(object):
 
 @implementer(IRRSetChange)
 @attr.s(frozen=True)
-class _ChangeRRSet(object):
+class _ChangeRRSet:
     action = attr.ib()
     rrset = attr.ib(validator=validators.instance_of(RRSet))
 
@@ -122,7 +122,7 @@ def upsert_rrset(rrset):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class NS(object):
+class NS:
     nameserver = attr.ib(validator=validators.instance_of(Name))
 
     @classmethod
@@ -138,7 +138,7 @@ class NS(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class A(object):
+class A:
     address = attr.ib(validator=validators.instance_of(IPv4Address))
 
     @classmethod
@@ -154,7 +154,7 @@ class A(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class AAAA(object):
+class AAAA:
     address = attr.ib(validator=validators.instance_of(IPv6Address))
 
     @classmethod
@@ -170,7 +170,7 @@ class AAAA(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class MX(object):
+class MX:
     name = attr.ib(validator=validators.instance_of(Name))
     preference = attr.ib(validator=validators.instance_of(int))
 
@@ -190,7 +190,7 @@ class MX(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class CNAME(object):
+class CNAME:
     canonical_name = attr.ib(validator=validators.instance_of(Name))
 
     @classmethod
@@ -252,7 +252,7 @@ def _quote(text):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class NAPTR(object):
+class NAPTR:
     """
     Represent a Name Authority Pointer record.
 
@@ -300,7 +300,7 @@ class NAPTR(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class PTR(object):
+class PTR:
     name = attr.ib(validator=validators.instance_of(Name))
 
     @classmethod
@@ -316,7 +316,7 @@ class PTR(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class SPF(object):
+class SPF:
     value = attr.ib(validator=validators.instance_of(str))
 
     @classmethod
@@ -338,7 +338,7 @@ class SPF(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class SRV(object):
+class SRV:
     priority = attr.ib(validator=validators.instance_of(int))
     weight = attr.ib(validator=validators.instance_of(int))
     port = attr.ib(validator=validators.instance_of(int))
@@ -363,7 +363,7 @@ class SRV(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class TXT(object):
+class TXT:
     texts = attr.ib(
         convert=tuple,
         validator=validators.instance_of(tuple),
@@ -391,7 +391,7 @@ class TXT(object):
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class SOA(object):
+class SOA:
     mname = attr.ib(validator=validators.instance_of(Name))
     rname = attr.ib(validator=validators.instance_of(Name))
     serial = attr.ib(validator=validators.instance_of(int))
@@ -425,7 +425,7 @@ _SOA_FIELDS = list(field.name for field in attr.fields(SOA))
 @provider(IResourceRecordLoader)
 @implementer(IBasicResourceRecord)
 @attr.s(frozen=True)
-class UnknownRecordType(object):
+class UnknownRecordType:
     value = attr.ib(validator=validators.instance_of(str))
 
     @classmethod
@@ -439,7 +439,7 @@ class UnknownRecordType(object):
 
 
 @attr.s
-class HostedZone(object):
+class HostedZone:
     """
     http://docs.aws.amazon.com/Route53/latest/APIReference/API_HostedZone.html
     """

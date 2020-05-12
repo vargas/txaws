@@ -8,7 +8,7 @@ PERMISSIONS = ("FULL_CONTROL",
                "READ_ACP")
 
 
-class XMLMixin(object):
+class XMLMixin:
 
     def to_xml(self):
         return "".join(self._to_xml())

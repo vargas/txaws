@@ -45,7 +45,7 @@ EC2_ENDPOINT_EU = "https://eu-west-1.ec2.amazonaws.com/"
 S3_ENDPOINT = "https://s3.amazonaws.com/"
 
 
-class AWSServiceEndpoint(object):
+class AWSServiceEndpoint:
     """
     @param uri: The URL for the service.
     @param method: The HTTP method used when accessing a service.
@@ -114,7 +114,7 @@ class AWSServiceEndpoint(object):
         self.method = method
 
 
-class AWSServiceRegion(object):
+class AWSServiceRegion:
     """
     This object represents a collection of client factories that use the same
     credentials. With Amazon, this collection is associated with a region

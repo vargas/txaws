@@ -32,7 +32,7 @@ class MemoryRoute53(MemoryService):
 
 
 @attr.s
-class Route53ClientState(object):
+class Route53ClientState:
     """
     L{Route53ClientState} holds all of the Route53 state associated with a
     single account.  This allows multiple clients with the same credentials to

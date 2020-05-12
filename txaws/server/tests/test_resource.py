@@ -25,7 +25,7 @@ from txaws import version
 from txaws.util import iso8601time
 
 
-class FakeRequest(object):
+class FakeRequest:
 
     def __init__(self, params, endpoint):
         self.params = params
@@ -76,7 +76,7 @@ class TestMethod(Method):
         return "data"
 
 
-class TestPrincipal(object):
+class TestPrincipal:
 
     def __init__(self, creds):
         self.creds = creds

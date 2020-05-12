@@ -25,7 +25,7 @@ def set_of(validator):
 
 
 @attr.s(frozen=True)
-class _ContainerOf(object):
+class _ContainerOf:
     """
     attrs validator for a container of objects which satisfy another
     validator.

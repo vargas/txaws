@@ -62,7 +62,7 @@ def static_resource(hierarchy):
     return root
 
 
-class sample_create_resource_record_sets_error_result(object):
+class sample_create_resource_record_sets_error_result:
     label = Name("duplicate.example.invalid.")
     type = "CNAME"
 
@@ -85,7 +85,7 @@ class sample_create_resource_record_sets_error_result(object):
 )
 
 
-class sample_list_resource_record_sets_result(object):
+class sample_list_resource_record_sets_result:
     label = Name("example.invalid.")
     soa_ttl = 60
     soa = SOA(
@@ -125,7 +125,7 @@ class sample_list_resource_record_sets_result(object):
 ).encode("utf-8")
 
 
-class sample_change_resource_record_sets_result(object):
+class sample_change_resource_record_sets_result:
     rrset = RRSet(
         label=Name("example.invalid."),
         type="NS",
@@ -147,7 +147,7 @@ class sample_change_resource_record_sets_result(object):
 </ChangeResourceRecordSetsResponse>
 """
 
-class sample_list_hosted_zones_result(object):
+class sample_list_hosted_zones_result:
     details = dict(
         name="example.invalid.",
         identifier="ABCDEF123456",
@@ -160,7 +160,7 @@ class sample_list_hosted_zones_result(object):
 """.format(**details).encode("utf-8")
 
 
-class sample_list_resource_records_with_alias_result(object):
+class sample_list_resource_records_with_alias_result:
     normal_target = Name("bar.example.invalid.")
     normal = RRSet(
         label=Name("foo.example.invalid."),

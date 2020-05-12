@@ -49,7 +49,7 @@ _SKIPS = {
 
 
 @attr.s(frozen=True)
-class _AWSRequest(object):
+class _AWSRequest:
     """
     An AWS request fixture.
 
@@ -103,7 +103,7 @@ class _AWSRequest(object):
         return cls(method, path, headers, body)
 
 
-class _AWS4TestSuiteTestCaseMixin(object):
+class _AWS4TestSuiteTestCaseMixin:
     """
     Run AWS's V4 signature test suite.  This is a base class for
     auto-generated tests.

@@ -396,7 +396,7 @@ class EC2ClientInstancesTestCase(TestCase):
 
 
 def make_query_factory(result, action, key_id, secret_key, params):
-    class FakeQuery(object):
+    class FakeQuery:
         def __init__(
                 self, action, creds=None, endpoint=None,
                 other_params={},

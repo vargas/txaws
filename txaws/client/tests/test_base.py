@@ -273,7 +273,7 @@ class BaseQueryTestCase(TestCase):
         agent_creations = []
 
         @implementer(IAgent)
-        class FakeAgent(object):
+        class FakeAgent:
             def __init__(self, reactor, contextFactory,
                          connectTimeout=None, bindAddress=None, pool=None):
                 agent_creations.append((reactor, contextFactory,
@@ -346,7 +346,7 @@ class StreamingBodyReceiverTestCase(TestCase):
 
 @attr.s
 @implementer(IAgent)
-class StubAgent(object):
+class StubAgent:
     _requests = attr.ib(init=False, default=attr.Factory(list))
 
     def request(self, method, url, headers, bodyProducer):

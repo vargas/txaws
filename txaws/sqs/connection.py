@@ -39,7 +39,7 @@ class BodyReceiver(protocol.Protocol):
         self.data.close()
 
 
-class SQSConnection(object):
+class SQSConnection:
 
     def __init__(self, host, agent=None):
         if agent is None:

@@ -21,7 +21,7 @@ from txaws.credentials import AWSCredentials
 
 __all__ = ["main"]
 
-class AWSStatusIndicator(object):
+class AWSStatusIndicator:
     def __init__(self, reactor):
         # Even though we have appindicator, we may still need the status
         # icon because we're on something that does not show them.

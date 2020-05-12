@@ -5,7 +5,7 @@ from txaws.testing.s3 import MemoryS3
 from txaws.testing.route53 import MemoryRoute53
 
 
-class FakeAWSServiceRegion(object):
+class FakeAWSServiceRegion:
 
     key_material = ""
 

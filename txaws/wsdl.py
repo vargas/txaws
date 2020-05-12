@@ -88,7 +88,7 @@ class WSDLParseError(Exception):
     """Raised when a response doesn't comply with its schema."""
 
 
-class LeafSchema(object):
+class LeafSchema:
     """Schema for a single XML leaf element in a response.
 
     @param tag: The name of the XML element tag this schema is for.
@@ -98,7 +98,7 @@ class LeafSchema(object):
         self.tag = tag
 
 
-class NodeSchema(object):
+class NodeSchema:
     """Schema for a single XML inner node in a response.
 
     A L{Node} can have other L{Node} or L{LeafSchema} objects as children.
@@ -156,7 +156,7 @@ class NodeSchema(object):
         return child
 
 
-class NodeItem(object):
+class NodeItem:
     """An inner node item in a tree of response elements.
 
     @param schema: The L{NodeSchema} this item must comply to.
@@ -299,7 +299,7 @@ class NodeItem(object):
         return etree.tostring(self._root, encoding="utf-8")
 
 
-class SequenceSchema(object):
+class SequenceSchema:
     """Schema for a single XML inner node holding a sequence of other nodes.
 
     @param tag: The name of the XML element tag this schema is for.
@@ -364,7 +364,7 @@ class SequenceSchema(object):
         return child
 
 
-class SequenceItem(object):
+class SequenceItem:
     """A sequence node item in a tree of response elements.
 
     @param schema: The L{SequenceSchema} this item must comply to.
@@ -458,7 +458,7 @@ class SequenceItem(object):
                                    self._schema.tag)
 
 
-class WSDLParser(object):
+class WSDLParser:
     """Build response schemas out of WSDL definitions"""
 
     leaf_types = ["string", "boolean", "dateTime", "int", "long", "double",

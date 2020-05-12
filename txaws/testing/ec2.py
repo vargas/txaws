@@ -16,7 +16,7 @@ from txaws.ec2.model import (
 )
 
 
-class FakeEC2Client(object):
+class FakeEC2Client:
 
     def __init__(self, creds, endpoint, instances=None, keypairs=None,
                  volumes=None, key_material="", security_groups=None,
@@ -143,7 +143,7 @@ class FakeEC2Client(object):
         return succeed(self.availability_zones)
 
 
-class FakePageGetter(object):
+class FakePageGetter:
 
     def __init__(self, status, payload):
         self.status = status

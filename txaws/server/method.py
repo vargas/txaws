@@ -29,7 +29,7 @@ def method(method_class):
     return method_class
 
 
-class Method(object):
+class Method:
     """Handle a single HTTP request to an API resource.
 
     @cvar actions: List of actions that the Method can handle, if C{None}

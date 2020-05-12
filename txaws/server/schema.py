@@ -73,7 +73,7 @@ class UnknownParametersError(Exception):
         super(UnknownParametersError, self).__init__(message)
 
 
-class Parameter(object):
+class Parameter:
     """A single parameter in an HTTP request.
 
     @param name: A name for the key of the parameter, as specified
@@ -91,6 +91,9 @@ class Parameter(object):
 
     supports_multiple = False
     kind = None
+
+    lower_than_min_template = "%s."
+    greater_than_max_template = "%s."
 
     def __init__(self, name=None, optional=False, default=None,
                  min=None, max=None, allow_none=False, validator=None,
@@ -460,7 +463,7 @@ class Structure(Parameter):
         return dict((k, self.fields[k].format(v)) for k, v in value)
 
 
-class Arguments(object):
+class Arguments:
     """Arguments parsed from a request."""
 
     def __init__(self, tree):
@@ -479,7 +482,7 @@ class Arguments(object):
 
     def __iter__(self):
         """Returns an iterator yielding C{(name, value)} tuples."""
-        return self.__dict__.items()
+        return self.__dict__.__iter__()
 
     def __getitem__(self, index):
         """Return the argument value with the given L{index}."""
@@ -526,7 +529,7 @@ def _namify_arguments(mapping):
     return result
 
 
-class Schema(object):
+class Schema:
     """
     The schema that the arguments of an HTTP request must be compliant with.
     """
@@ -599,7 +602,7 @@ class Schema(object):
         try:
             tree = structure.coerce(self._convert_flat_to_nest(params))
             rest = {}
-        except UnknownParametersError, error:
+        except UnknownParametersError as error:
             tree = error.result
             rest = self._convert_nest_to_flat(error.unknown)
         return Arguments(tree), rest

@@ -564,7 +564,7 @@ class EC2Client(BaseClient):
         return d.addCallback(self.parser.describe_availability_zones)
 
 
-class Parser(object):
+class Parser:
     """A parser for EC2 responses"""
 
     def instances_set(self, root, reservation):
@@ -1053,7 +1053,7 @@ class Query(BaseQuery):
         return d.addErrback(ec2_error_wrapper)
 
 
-class Signature(object):
+class Signature:
     """Compute EC2-compliant signatures for requests.
 
     @ivar creds: The L{AWSCredentials} to use to compute the signature.

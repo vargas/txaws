@@ -41,7 +41,7 @@ def to_xml(body_element):
     return d
 
 
-class _TagFactory(object):
+class _TagFactory:
     """
     A factory for L{Tag} objects; the implementation of the L{tags} object.
 

@@ -79,7 +79,7 @@ def error_wrapper(error, errorClass):
         error.raiseException()
 
 
-class BaseClient(object):
+class BaseClient:
     """Create an AWS client.
 
     @param creds: User authentication credentials to use.
@@ -175,7 +175,7 @@ class WebVerifyingContextFactory(VerifyingContextFactory):
 
 
 @attr.s(frozen=True)
-class _QueryArgument(object):
+class _QueryArgument:
     """
     Representation of a single URL query argument, eg I{foo=bar}.
     """
@@ -232,7 +232,7 @@ def url_context(**kw):
 
 
 @attr.s(frozen=True)
-class _URLContext(object):
+class _URLContext:
     """
     A description of the URL involved in an AWS request.
 
@@ -310,7 +310,7 @@ def _get_joined_path(ctx):
 
 
 @attr.s
-class RequestDetails(object):
+class RequestDetails:
     """
     Describe an AWS request in sufficient detail to sign and submit
     it.
@@ -408,7 +408,7 @@ def query(**kw):
 
 
 @attr.s(frozen=True)
-class _Query(object):
+class _Query:
     """
     Representation of enough information to submit an AWS request.
     """
@@ -619,7 +619,7 @@ def _get_agent(scheme, host, reactor, contextFactory=None):
             return Agent(reactor)
 
 
-class FakeClient(object):
+class FakeClient:
     """
     XXX
     A fake client object for some degree of backwards compatability for
@@ -630,7 +630,7 @@ class FakeClient(object):
     status = None
 
 
-class BaseQuery(object):
+class BaseQuery:
 
     def __init__(self, action=None, creds=None, endpoint=None, reactor=None,
         body_producer=None, receiver_factory=None):

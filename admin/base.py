@@ -25,7 +25,7 @@ class UnknownState(Error):
     pass
 
 
-class Client(object):
+class Client:
     """
     A convenience wrapper for the Launchpad object.
     """

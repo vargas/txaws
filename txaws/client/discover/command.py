@@ -13,7 +13,7 @@ from txaws.exception import AWSError
 from txaws.service import AWSServiceRegion
 
 
-class Command(object):
+class Command:
     """
     An EC2 API method call command that can make a request and display the
     response received from the backend cloud.

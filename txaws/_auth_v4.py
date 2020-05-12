@@ -167,7 +167,7 @@ def _make_signed_headers(headers, headers_to_sign):
 
 
 @attr.s(frozen=True)
-class _CanonicalRequest(object):
+class _CanonicalRequest:
     """
     A canonicalized request.  See
     U{http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html}
@@ -297,7 +297,7 @@ class _CanonicalRequest(object):
 
 
 @attr.s(frozen=True)
-class _CredentialScope(object):
+class _CredentialScope:
     """
     The scope of the AWS credentials.
 
@@ -328,7 +328,7 @@ class _CredentialScope(object):
 
 
 @attr.s(frozen=True)
-class _Credential(object):
+class _Credential:
     """
     An AWS credential.
 
@@ -355,7 +355,7 @@ class _Credential(object):
 
 
 @attr.s(frozen=True)
-class _SignableAWS4HMAC256Token(object):
+class _SignableAWS4HMAC256Token:
     """
     A signable AWS4 HMAC 256 token.  The AWS documentation calls the
     serialization of this the "string to sign".

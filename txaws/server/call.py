@@ -4,7 +4,7 @@ from txaws.version import ec2_api as ec2_api_version
 from txaws.server.exception import APIError
 
 
-class Call(object):
+class Call:
     """Hold information about a single API call initiated by an HTTP request.
 
     @param raw_params: The raw parameters for the action to be executed, the

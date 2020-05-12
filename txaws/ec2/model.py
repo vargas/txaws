@@ -10,7 +10,7 @@ from datetime import datetime
 import attr
 from attr.validators import instance_of
 
-class Reservation(object):
+class Reservation:
     """An Amazon EC2 Reservation.
 
     @attrib reservation_id: Unique ID of the reservation.
@@ -23,7 +23,7 @@ class Reservation(object):
         self.groups = groups or []
 
 
-class Instance(object):
+class Instance:
     """An Amazon EC2 Instance.
 
     @attrib instance_id: The instance ID of this instance.
@@ -74,7 +74,7 @@ class Instance(object):
 
 
 @attr.s(frozen=True)
-class ConsoleOutput(object):
+class ConsoleOutput:
     """The console output of an EC2 instance.
 
     @ivar instance_id: The identifier of the instance the console text belongs
@@ -93,7 +93,7 @@ class ConsoleOutput(object):
     output = attr.ib(validator=instance_of(str))
 
 
-class SecurityGroup(object):
+class SecurityGroup:
     """An EC2 security group.
 
     @ivar owner_id: The AWS access key ID of the owner of this security group.
@@ -113,7 +113,7 @@ class SecurityGroup(object):
         self.allowed_ips = ips or []
 
 
-class UserIDGroupPair(object):
+class UserIDGroupPair:
     """A user ID/group name pair associated with a L{SecurityGroup}."""
 
     def __init__(self, user_id, group_name):
@@ -121,7 +121,7 @@ class UserIDGroupPair(object):
         self.group_name = group_name
 
 
-class IPPermission(object):
+class IPPermission:
     """An IP permission associated with a L{SecurityGroup}."""
 
     def __init__(self, ip_protocol, from_port, to_port, cidr_ip):
@@ -131,7 +131,7 @@ class IPPermission(object):
         self.cidr_ip = cidr_ip
 
 
-class Volume(object):
+class Volume:
     """An EBS volume instance."""
 
     def __init__(self, id, size, status, create_time, availability_zone,
@@ -145,7 +145,7 @@ class Volume(object):
         self.attachments = []
 
 
-class Attachment(object):
+class Attachment:
     """An attachment of a L{Volume}."""
 
     def __init__(self, instance_id, device, status, attach_time):
@@ -155,7 +155,7 @@ class Attachment(object):
         self.attach_time = attach_time
 
 
-class Snapshot(object):
+class Snapshot:
     """A snapshot of a L{Volume}."""
 
     def __init__(self, id, volume_id, status, start_time, progress):
@@ -166,7 +166,7 @@ class Snapshot(object):
         self.progress = progress
 
 
-class Keypair(object):
+class Keypair:
     """A convenience object for holding keypair data."""
 
     def __init__(self, name, fingerprint, material=None):
@@ -175,7 +175,7 @@ class Keypair(object):
         self.material = material
 
 
-class AvailabilityZone(object):
+class AvailabilityZone:
     """A convenience object for holding availability zone data."""
 
     def __init__(self, name, state):

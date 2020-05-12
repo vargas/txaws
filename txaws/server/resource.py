@@ -75,7 +75,7 @@ class QueryAPI(Resource):
         attributes and if the authentication succeeds, it will be
         passed to the created L{Call}.
         """
-        raise NotImplemented("Must be implemented by subclasses")
+        raise NotImplementedError("Must be implemented by subclasses")
 
     def handle(self, request):
         """Handle an HTTP request for executing an API call.

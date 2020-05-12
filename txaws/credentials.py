@@ -28,7 +28,7 @@ class _CompatCredentialsNotFoundError(CredentialsNotFoundError, ValueError):
 
 
 @attr.s(init=False)
-class AWSCredentials(object):
+class AWSCredentials:
     """Create an AWSCredentials object.
 
     @param access_key: The access key to use. If None the environment variable
