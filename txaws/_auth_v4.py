@@ -291,7 +291,7 @@ class _CanonicalRequest:
             request.
         @rtype: L{str}
         """
-        return b'\n'.join(attr.astuple(self))
+        return '\n'.join(attr.astuple(self))
 
     def hash(self):
         """
@@ -301,7 +301,7 @@ class _CanonicalRequest:
             serialization.
         @rtype: L{str}
         """
-        return hashlib.sha256(self.serialize()).hexdigest()
+        return hashlib.sha256(self.serialize().encode()).hexdigest()
 
 
 @attr.s(frozen=True)
