@@ -279,7 +279,9 @@ class _CanonicalRequest:
         return cls.from_request_components(
             method=method, url=url, headers=headers,
             headers_to_sign=headers_to_sign,
-            payload_hash=hashlib.sha256(payload).hexdigest(),
+            payload_hash=(hashlib.sha256(payload).hexdigest() 
+                        if isinstance(payload, bytes) 
+                        else hashlib.sha256(payload.encode()).hexdigest()),
         )
 
 
