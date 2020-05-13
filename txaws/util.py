@@ -82,10 +82,11 @@ def parse(url, defaultPort=True):
     parsed = urlparse(url)
     scheme = parsed[0]
     if isinstance(scheme, bytes):
-        path = urlunparse((b"", b"") + parsed[2:])
+        path = urlunparse((b"", b"") + parsed[2:]).decode()
+        host = parsed[1].decode()
     else:
         path = urlunparse(("", "") + parsed[2:])
-    host = parsed[1]
+        host = parsed[1]
 
     if ":" in host:
         host, port = host.split(":")

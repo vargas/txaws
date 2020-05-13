@@ -1,4 +1,5 @@
 from urllib.parse import urlparse
+import binascii
 
 from twisted.trial.unittest import TestCase
 
@@ -9,11 +10,11 @@ class MiscellaneousTestCase(TestCase):
 
     def test_hmac_sha1(self):
         cases = [
-            ("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b".decode("hex"),
+            (binascii.unhexlify(b"0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b"),
              "Hi There", "thcxhlUFcmTii8C2+zeMjvFGvgA="),
             ("Jefe", "what do ya want for nothing?",
              "7/zfauXrL6LSdBbV8YTfnCWafHk="),
-            ("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa".decode("hex"),
+            (binascii.unhexlify(b"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
              "\xdd" * 50, "El1zQrmsEc2Ro5r0iqF7T2PxddM="),
             ]
 
