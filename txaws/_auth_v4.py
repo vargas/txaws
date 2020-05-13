@@ -411,7 +411,7 @@ class _SignableAWS4HMAC256Token:
             self.ALGORITHM,
             self.amz_date,
             self.credential_scope.serialize(),
-            self.canonical_request.hash(),
+            self.canonical_request.hash().decode(),
         ])).encode()
 
     def signature(self, signing_key):

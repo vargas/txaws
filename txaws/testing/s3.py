@@ -106,18 +106,24 @@ class _MemoryS3Client(MemoryClient):
             max_keys = 1000
 
         if prefix is None:
-            prefix = ""
+            prefix = b""
+
+        if isinstance(prefix, str):
+            prefix = prefix.encode()
 
         if marker is None:
-            keys_after = ""
+            keys_after = b""
         else:
             keys_after = marker
+
+        if isinstance(keys_after, str):
+            keys_after = keys_after.encode()
 
         prefixed_contents = (
             content
             for content
             in sorted(listing.contents, key=lambda item: item.key)
-            if content.key.startswith(prefix)
+            if (content.key if isinstance(content.key, bytes) else content.key.encode()).startswith(prefix)
             and content.key > keys_after
         )
 
