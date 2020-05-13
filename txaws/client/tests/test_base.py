@@ -123,7 +123,7 @@ class BaseQueryTestCase(TestCase):
         self.cleanupServerConnections = 0
         name = self.mktemp()
         os.mkdir(name)
-        FilePath(name).child("file").setContent("0123456789")
+        FilePath(name).child("file").setContent(b"0123456789")
         r = static.File(name)
         r.putChild('thing_to_put', PuttableResource())
         self.site = server.Site(r, timeout=None)
