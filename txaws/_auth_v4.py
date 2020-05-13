@@ -239,13 +239,15 @@ class _CanonicalRequest:
             I{x-amz-content-sha256} header set to
             C{b"UNSIGNED-PAYLOAD"}.
         """
+        if isinstance(url, bytes):
+            url = url.decode()
         parsed = urlparse(url)
         if payload_hash is None:
             # This magic string tells AWS to disregard the payload for
             # purposes of signing.  The x-amz-content-sha256 header
             # sent to AWS in the request must have the exact same
             # value for this to work.
-            payload_hash = b"UNSIGNED-PAYLOAD"
+            payload_hash = "UNSIGNED-PAYLOAD"
         return cls(
             method=method,
             canonical_uri=_make_canonical_uri(parsed),
