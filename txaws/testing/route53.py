@@ -263,6 +263,10 @@ def _reverse_dns_labels(name):
     """
     if isinstance(name, bytes):
         name = name.decode()
+    if isinstance(name, tuple):
+        name = '.'.join(name)
+    if isinstance(name, Name):
+        name = str(name)
     return "".join(name.split(".")[-2::-1]) + "."
 
 

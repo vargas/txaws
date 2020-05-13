@@ -1099,7 +1099,7 @@ class Signature:
     def old_signing_text(self):
         """Return the text needed for signing using SignatureVersion 1."""
         result = []
-        for key, value in sorted(list(self.params.keys()), key=str.lower):
+        for key, value in sorted(list(self.params.items()), key=str.lower):
             result.append("%s%s" % (key, value))
         return "".join(result)
 

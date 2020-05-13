@@ -124,7 +124,7 @@ class _MemoryS3Client(MemoryClient):
             for content
             in sorted(listing.contents, key=lambda item: item.key)
             if (content.key if isinstance(content.key, bytes) else content.key.encode()).startswith(prefix)
-            and content.key > keys_after
+            and (content.key if isinstance(content.key, bytes) else content.key.encode()) > keys_after
         )
 
         contents = list(islice(prefixed_contents, max_keys))
