@@ -78,10 +78,9 @@ the response elements one actually accesses are consistent with the
 WDSL definition and that all modifications of those items are consistent
 as well.
 """
-try:
-    from lxml import etree
-except ImportError:
-    etree = None
+
+import sys
+from lxml import etree
 
 
 class WSDLParseError(Exception):
@@ -403,7 +402,7 @@ class SequenceItem:
         """
         tag = self._schema.tag
         children = self._root.getchildren()
-        if len(children) >= int(self._schema.max_occurs):
+        if len(children) >= sys.maxsize if self._schema.max_occurs == 'unbounded' else int(self._schema.max_occurs):
             raise WSDLParseError("Too many items in tag '%s'" % tag)
         schema = self._schema.child
         tag = "item"
