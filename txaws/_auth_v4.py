@@ -393,7 +393,7 @@ class _SignableAWS4HMAC256Token:
     @type canonical_request: L{_CanonicalRequest}
     """
 
-    ALGORITHM = "AWS4-HMAC-SHA256"
+    ALGORITHM = b"AWS4-HMAC-SHA256"
 
     amz_date = attr.ib()
     credential_scope = attr.ib()

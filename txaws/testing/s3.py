@@ -106,10 +106,10 @@ class _MemoryS3Client(MemoryClient):
             max_keys = 1000
 
         if prefix is None:
-            prefix = b""
+            prefix = ""
 
         if marker is None:
-            keys_after = b""
+            keys_after = ""
         else:
             keys_after = marker
 

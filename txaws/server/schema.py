@@ -444,7 +444,7 @@ class Structure(Parameter):
                     if len(v) == 1:
                         # We support "foo.1" as "foo" as long as there is only
                         # one "foo.#" parameter provided.... -_-
-                        v = v.values()[0]
+                        v = list(v.values())[0]
                     else:
                         raise InvalidParameterCombinationError(k)
                 result[k] = self.fields[k].coerce(v)

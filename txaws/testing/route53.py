@@ -261,7 +261,9 @@ def _reverse_dns_labels(name):
     @type name: L{Name}
     @rtype: L{str}
     """
-    return "".join(str(name).split(".")[-2::-1]) + "."
+    if isinstance(name, bytes):
+        name = name.decode()
+    return "".join(name.split(".")[-2::-1]) + "."
 
 
 def _process_change(rrsets, change):
