@@ -168,8 +168,13 @@ def _make_signed_headers(headers, headers_to_sign):
     @return: The semicolon-delimited list of headers.
     @rtype: L{bytes}
     """
-    return b";".join(header.lower() for header in sorted(headers_to_sign)
-                     if header in headers)
+    to_sign = []
+    for header in sorted(headers_to_sign):
+        if header in headers:
+            if isinstance(header, bytes):
+                header = header.decode()
+            to_sign.append(header.lower())
+    return ";".join(to_sign)
 
 
 @attr.s(frozen=True)

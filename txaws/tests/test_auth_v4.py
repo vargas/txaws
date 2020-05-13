@@ -565,7 +565,7 @@ class SignableAWS4HMAC256TokenTestCase(unittest.SynchronousTestCase):
                           b"%(request_hash)s" % {
                               b"date": self.amz_date,
                               b"scope": self.scope.serialize(),
-                              b"request_hash": self.request.hash(),
+                              b"request_hash": self.request.hash().encode(),
                           }))
 
     def test_signature(self):
