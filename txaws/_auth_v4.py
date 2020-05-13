@@ -293,7 +293,10 @@ class _CanonicalRequest:
             request.
         @rtype: L{str}
         """
-        return '\n'.join(attr.astuple(self))
+        s_tuple = attr.astuple(self)
+        if isinstance(s_tuple[0], bytes):
+            return b'\n'.join(s_tuple)
+        return ('\n'.join(s_tuple)).encode()
 
     def hash(self):
         """
@@ -303,7 +306,7 @@ class _CanonicalRequest:
             serialization.
         @rtype: L{str}
         """
-        return hashlib.sha256(self.serialize().encode()).hexdigest()
+        return hashlib.sha256(self.serialize()).hexdigest()
 
 
 @attr.s(frozen=True)
