@@ -408,7 +408,7 @@ class _SignableAWS4HMAC256Token:
         @rtype: L{str}
         """
         return ("\n".join([
-            self.ALGORITHM,
+            self.ALGORITHM.decode(),
             self.amz_date,
             self.credential_scope.serialize(),
             self.canonical_request.hash(),
