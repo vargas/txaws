@@ -145,7 +145,7 @@ def _make_canonical_headers(headers, headers_to_sign):
         comma_values = ','.join(' '.join(line.strip().split())
                                  for value in values
                                  for line in (
-                                     value.decode().splitlines() if isinstance(value, bytes) 
+                                     value.decode().splitlines() if isinstance(value, bytes)
                                      else value.splitlines()))
         pairs.append((name.lower(), comma_values))
 
@@ -279,8 +279,8 @@ class _CanonicalRequest:
         return cls.from_request_components(
             method=method, url=url, headers=headers,
             headers_to_sign=headers_to_sign,
-            payload_hash=(hashlib.sha256(payload).hexdigest() 
-                        if isinstance(payload, bytes) 
+            payload_hash=(hashlib.sha256(payload).hexdigest()
+                        if isinstance(payload, bytes)
                         else hashlib.sha256(payload.encode()).hexdigest()),
         )
 
@@ -293,10 +293,13 @@ class _CanonicalRequest:
             request.
         @rtype: L{str}
         """
-        s_tuple = attr.astuple(self)
-        if isinstance(s_tuple[0], bytes):
-            return b'\n'.join(s_tuple)
-        return ('\n'.join(s_tuple)).encode()
+        s_tuple = []
+        for part in attr.astuple(self):
+            if isinstance(s_tuple[0], bytes):
+                s_tuple.append(part)
+            else:
+                s_tuple.append(part.encode())
+        return b'\n'.join(s_tuple)
 
     def hash(self):
         """
