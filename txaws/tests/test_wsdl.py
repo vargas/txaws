@@ -525,7 +525,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"<keyName>foo</keyName>"
                b"<keyFingerprint>9a:81:96:46</keyFingerprint>"
                b"<keyMaterial>MIIEowIBAAKCAQEAi</keyMaterial>"
-               b"</CreateKeyPairResponse>" % xmlns)
+               b"</CreateKeyPairResponse>" % xmlns.encode())
 
         response = schema.create(etree.fromstring(xml))
         self.assertEqual("65d85081-abbc", response.requestId)
@@ -541,7 +541,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
         xml = (b"<DeleteKeyPairResponse xmlns=\"%s\">"
                b"<requestId>acc41b73-4c47-4f80</requestId>"
                b"<return>true</return>"
-               b"</DeleteKeyPairResponse>" % xmlns)
+               b"</DeleteKeyPairResponse>" % xmlns.encode())
         root = etree.fromstring(xml)
         response = schema.create(root)
         self.assertEqual("acc41b73-4c47-4f80", response.requestId)
@@ -560,7 +560,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
                b"</item>"
                b"</keySet>"
-               b"</DescribeKeyPairsResponse>" % xmlns)
+               b"</DescribeKeyPairsResponse>" % xmlns.encode())
         root = etree.fromstring(xml)
         response = schema.create(root)
         self.assertEqual("3ef0aa1d-57dd-4272", response.requestId)
@@ -580,7 +580,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
                b"</item>"
                b"</keySet>"
-               b"</DescribeKeyPairsResponse>" % xmlns)
+               b"</DescribeKeyPairsResponse>" % xmlns.encode())
         root = etree.fromstring(xml)
         response = schema.create(root)
         response.keySet[0].keyName = "new-key"
@@ -592,7 +592,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"<keyFingerprint>94:88:29:60:cf</keyFingerprint>"
                b"</item>"
                b"</keySet>"
-               b"</DescribeKeyPairsResponse>" % xmlns)
+               b"</DescribeKeyPairsResponse>" % xmlns.encode())
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_key_pairs_response(self):
@@ -612,7 +612,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"<keyFingerprint>11:22:33:44</keyFingerprint>"
                b"</item>"
                b"</keySet>"
-               b"</DescribeKeyPairsResponse>" % xmlns)
+               b"</DescribeKeyPairsResponse>" % xmlns.encode())
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_addresses_response(self):
@@ -631,7 +631,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"<publicIp>192.168.0.1</publicIp>"
                b"</item>"
                b"</addressesSet>"
-               b"</DescribeAddressesResponse>" % xmlns)
+               b"</DescribeAddressesResponse>" % xmlns.encode())
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_instances_response_with_username(self):
@@ -655,7 +655,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"</instancesSet>"
                b"</item>"
                b"</reservationSet>"
-               b"</DescribeInstancesResponse>" % xmlns)
+               b"</DescribeInstancesResponse>" % xmlns.encode())
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_instances_response(self):
@@ -679,7 +679,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"</instancesSet>"
                b"</item>"
                b"</reservationSet>"
-               b"</DescribeInstancesResponse>" % xmlns)
+               b"</DescribeInstancesResponse>" % xmlns.encode())
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_parse_describe_security_groups_response(self):
@@ -708,7 +708,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"</ipPermissions>"
                b"</item>"
                b"</securityGroupInfo>"
-               b"</DescribeSecurityGroupsResponse>" % xmlns)
+               b"</DescribeSecurityGroupsResponse>" % xmlns.encode())
         root = etree.fromstring(xml)
         response = schema.create(root)
         self.assertEqual("3ef0aa1d-57dd-4272", response.requestId)
@@ -744,7 +744,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"</ipPermissions>"
                b"</item>"
                b"</securityGroupInfo>"
-               b"</DescribeSecurityGroupsResponse>" % xmlns)
+               b"</DescribeSecurityGroupsResponse>" % xmlns.encode())
         root = etree.fromstring(xml)
         response = schema.create(root)
         response.securityGroupInfo[0].ownerId = "abc123"
@@ -772,7 +772,7 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"</ipPermissions>"
                b"</item>"
                b"</securityGroupInfo>"
-               b"</DescribeSecurityGroupsResponse>" % xmlns)
+               b"</DescribeSecurityGroupsResponse>" % xmlns.encode())
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
 
     def test_create_describe_security_groups_response(self):
@@ -794,5 +794,5 @@ class WDSLParserTestCase(WsdlBaseTestCase):
                b"<groupDescription>All people that love hex</groupDescription>"
                b"</item>"
                b"</securityGroupInfo>"
-               b"</DescribeSecurityGroupsResponse>" % xmlns)
+               b"</DescribeSecurityGroupsResponse>" % xmlns.encode())
         self.assertEqual(xml, etree.tostring(schema.dump(response)))
