@@ -38,7 +38,7 @@ class BucketItem:
     key = attr.ib()
     modification_date = attr.ib(validator=validators.instance_of(datetime))
     etag = attr.ib()
-    size = attr.ib(validator=validators.instance_of(bytes))
+    size = attr.ib(validator=validators.instance_of(str))
     storage_class = attr.ib()
     owner = attr.ib(
         validator=validators.optional(validators.instance_of(ItemOwner)),

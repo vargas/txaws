@@ -75,7 +75,7 @@ class _MemoryS3Client(MemoryClient):
         return succeed(list(
             item["bucket"]
             for item
-            in self._state.buckets.itervalues()
+            in self._state.buckets.values()
         ))
 
     @_rate_limited

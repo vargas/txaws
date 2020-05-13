@@ -50,7 +50,7 @@ def getSignatureKey(key, dateStamp, regionName, serviceName):
     @return: The signature.
     @rtype: L{bytes}
     """
-    kDate = sign((b'AWS4' + key), dateStamp)
+    kDate = sign(('AWS4' + key), dateStamp)
     kRegion = sign(kDate, regionName)
     kService = sign(kRegion, serviceName)
     kSigning = sign(kService, b'aws4_request')
