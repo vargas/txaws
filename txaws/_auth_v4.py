@@ -144,7 +144,9 @@ def _make_canonical_headers(headers, headers_to_sign):
             values = [values]
         comma_values = ','.join(' '.join(line.strip().split())
                                  for value in values
-                                 for line in value.splitlines())
+                                 for line in (
+                                     value.decode().splitlines() if isinstance(value, bytes) 
+                                     else value.splitlines()))
         pairs.append((name.lower(), comma_values))
 
     sorted_pairs = sorted('%s:%s' % (name, value)
