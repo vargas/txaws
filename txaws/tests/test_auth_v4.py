@@ -6,7 +6,7 @@ Unit tests for AWS authorization, version 4.
 import datetime
 import hashlib
 import hmac
-import urllib.parse import urlparse
+from urllib.parse import urlparse
 
 from twisted.trial import unittest
 
