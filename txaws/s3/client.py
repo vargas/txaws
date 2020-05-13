@@ -153,10 +153,11 @@ class S3Client(BaseClient):
         d.addCallback(self._parse_list_buckets)
         return d
 
-    def _parse_list_buckets(self, (response, xml_bytes)):
+    def _parse_list_buckets(self, response):
         """
         Parse XML bucket list response.
         """
+        status, xml_bytes = response
         root = XML(xml_bytes)
         buckets = []
         for bucket_data in root.find("Buckets"):
