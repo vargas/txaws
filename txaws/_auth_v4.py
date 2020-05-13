@@ -295,7 +295,7 @@ class _CanonicalRequest:
         """
         s_tuple = []
         for part in attr.astuple(self):
-            if isinstance(s_tuple[0], bytes):
+            if isinstance(part, bytes):
                 s_tuple.append(part)
             else:
                 s_tuple.append(part.encode())
