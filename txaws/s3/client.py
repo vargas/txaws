@@ -30,7 +30,7 @@ from twisted.internet import task
 import hashlib
 from hashlib import sha256
 
-from urllib import urlencode, unquote
+from urllib.parse import urlencode, unquote
 from dateutil.parser import parse as parseTime
 
 from txaws.client.base import (
