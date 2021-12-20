@@ -196,7 +196,7 @@ class _QueryArgument:
 
         if self.value is None:
             return q(self.name)
-        return q(self.name) + b"=" + q(self.value)
+        return q(self.name) + "=" + q(self.value)
 
 
 def _tuples_to_queryarg(tuples):
@@ -283,7 +283,7 @@ class _URLContext:
         @return: The encoded query component.
         @rtype: L{bytes}
         """
-        return b"&".join(arg.url_encode() for arg in self.query)
+        return "&".join(arg.url_encode() for arg in self.query)
 
 
     def get_encoded_url(self):
@@ -295,15 +295,15 @@ class _URLContext:
             scheme=self.scheme.encode("ascii"),
             host=self.get_encoded_host(),
             path=self.get_encoded_path(),
-            query=b"",
+            query="",
         )
         query = self.get_encoded_query()
         if query:
-            params[b"query"] = b"?" + query
+            params["query"] = "?" + query
         if self.port is None:
-            return b"%(scheme)s://%(host)s%(path)s%(query)s" % params
+            return "%(scheme)s://%(host)s%(path)s%(query)s" % params
         params["port"] = self.port
-        return b"%(scheme)s://%(host)s:%(port)d%(path)s%(query)s" % params
+        return "%(scheme)s://%(host)s:%(port)d%(path)s%(query)s" % params
 
 
 def _get_joined_path(ctx):
