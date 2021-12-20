@@ -49,6 +49,20 @@ from txaws.service import AWSServiceEndpoint, REGION_US_EAST_1, S3_ENDPOINT
 from txaws.util import XML
 
 
+from typing import AnyStr
+
+
+
+def to_str(str_or_bytes: AnyStr, encoding: str = "utf-8") -> str:
+    if isinstance(str_or_bytes, str):
+        return str_or_bytes
+    return str_or_bytes.decode(encoding)
+
+
+# alias
+_t = to_str
+
+
 def _to_dict(headers):
     return {k: vs[0] for (k, vs) in headers.getAllRawHeaders()}
 
@@ -888,8 +902,8 @@ def s3_url_context(service_endpoint, bucket=None, object_name=None):
             else:
                 path.append("")
     return _S3URLContext(
-        scheme=service_endpoint.scheme.decode("utf-8"),
-        host=service_endpoint.get_host().decode("utf-8"),
+        scheme=_t(service_endpoint.scheme),
+        host=_t(service_endpoint.get_host()),
         port=service_endpoint.port,
         path=path,
         query=query,
