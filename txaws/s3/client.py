@@ -13,44 +13,37 @@ Various API-incompatible changes are planned in order to expose missing
 functionality in this wrapper.
 """
 
-from io import BytesIO
 import datetime
+import hashlib
 import mimetypes
 import warnings
-from operator import itemgetter
-
+from dateutil.parser import parse as parseTime
+from hashlib import sha256
 from incremental import Version
-
+from io import BytesIO
+from operator import itemgetter
+from twisted.internet import task
 from twisted.python.deprecate import deprecatedModuleAttribute
+from twisted.web.client import FileBodyProducer
 from twisted.web.http import datetimeToString
 from twisted.web.http_headers import Headers
-from twisted.web.client import FileBodyProducer
-from twisted.internet import task
-
-import hashlib
-from hashlib import sha256
-
+from typing import AnyStr
 from urllib.parse import urlencode, unquote
-from dateutil.parser import parse as parseTime
 
+from txaws import _auth_v4
 from txaws.client.base import (
     _URLContext, BaseClient, BaseQuery, error_wrapper,
     RequestDetails, query,
 )
 from txaws.s3.acls import AccessControlPolicy
+from txaws.s3.exception import S3Error
 from txaws.s3.model import (
     Bucket, BucketItem, BucketListing, ItemOwner, LifecycleConfiguration,
     LifecycleConfigurationRule, NotificationConfiguration, RequestPayment,
     VersioningConfiguration, WebsiteConfiguration, MultipartInitiationResponse,
     MultipartCompletionResponse)
-from txaws import _auth_v4
-from txaws.s3.exception import S3Error
 from txaws.service import AWSServiceEndpoint, REGION_US_EAST_1, S3_ENDPOINT
 from txaws.util import XML
-
-
-from typing import AnyStr
-
 
 
 def to_str(str_or_bytes: AnyStr, encoding: str = "utf-8") -> str:
@@ -65,6 +58,7 @@ _t = to_str
 
 def _to_dict(headers):
     return {k: vs[0] for (k, vs) in headers.getAllRawHeaders()}
+
 
 def s3_error_wrapper(error):
     error_wrapper(error, S3Error)
@@ -91,10 +85,8 @@ class S3Client(BaseClient):
         d.addErrback(s3_error_wrapper)
         return d
 
-
     def _query_factory(self, details, **kw):
         return self.query_factory(credentials=self.creds, details=details, **kw)
-
 
     def _details(self, **kw):
         body = kw.pop("body", None)
@@ -121,12 +113,12 @@ class S3Client(BaseClient):
         # (included in the signature) more than 15 minutes in the past
         # are rejected. :/
         if body is not None:
-            content_sha256 = sha256(body).hexdigest().decode("ascii")
+            content_sha256 = _t(sha256(body).hexdigest(), encoding="ascii")
             body_producer = FileBodyProducer(BytesIO(body), cooperator=self._cooperator)
         elif body_producer is None:
             # Just as important is to include the empty content hash
             # for all no-body requests.
-            content_sha256 = sha256(b"").hexdigest().decode("ascii")
+            content_sha256 = _t(sha256(b"").hexdigest(), encoding="ascii")
         else:
             # Tell AWS we're not trying to sign the payload.
             content_sha256 = None
@@ -140,16 +132,13 @@ class S3Client(BaseClient):
             **kw
         )
 
-
     def _url_context(self, *a, **kw):
         return s3_url_context(self.endpoint, *a, **kw)
-
 
     def _headers(self, content_type):
         if content_type is None:
             return Headers()
         return Headers({"content-type": [content_type]})
-
 
     def list_buckets(self):
         """
