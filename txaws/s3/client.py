@@ -52,8 +52,14 @@ def to_str(str_or_bytes: AnyStr, encoding: str = "utf-8") -> str:
     return str_or_bytes.decode(encoding)
 
 
+def to_bytes(str_or_bytes: AnyStr, encoding: str = "utf-8") -> bytes:
+    if isinstance(str_or_bytes, bytes):
+        return str_or_bytes
+    return str_or_bytes.encode(encoding)
+
 # alias
 _t = to_str
+_b = to_bytes
 
 
 def _to_dict(headers):
@@ -124,7 +130,7 @@ class S3Client(BaseClient):
             content_sha256 = None
 
         return RequestDetails(
-            region=REGION_US_EAST_1,
+            region=_b(REGION_US_EAST_1),
             service=b"s3",
             body_producer=body_producer,
             amz_headers=amz_headers,
