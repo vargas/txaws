@@ -6,6 +6,8 @@ from urllib.parse import quote
 from datetime import datetime
 from io import BytesIO
 
+from txaws.s3.tweaks import to_bytes, to_str
+
 try:
     from xml.etree.ElementTree import ParseError
 except ImportError:
@@ -42,6 +44,12 @@ from txaws.service import AWSServiceEndpoint
 from txaws.client.ssl import VerifyingContextFactory
 from txaws.client._validators import list_of as _list_of
 from txaws import _auth_v4
+
+
+# aliases
+_t = to_str
+_b = to_bytes
+
 
 def error_wrapper(error, errorClass):
     """
@@ -265,8 +273,8 @@ class _URLContext:
         @return: The encoded path component.
         @rtype: L{bytes}
         """
-        return b"/" + b"/".join(
-            quote(segment.encode("utf-8"), safe=b"") for segment in self.path
+        return "/" + "/".join(
+            quote(_t(segment, encoding="utf-8"), safe=b"") for segment in self.path
         )
 
 

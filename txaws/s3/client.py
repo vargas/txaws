@@ -27,7 +27,6 @@ from twisted.python.deprecate import deprecatedModuleAttribute
 from twisted.web.client import FileBodyProducer
 from twisted.web.http import datetimeToString
 from twisted.web.http_headers import Headers
-from typing import AnyStr
 from urllib.parse import urlencode, unquote
 
 from txaws import _auth_v4
@@ -42,22 +41,12 @@ from txaws.s3.model import (
     LifecycleConfigurationRule, NotificationConfiguration, RequestPayment,
     VersioningConfiguration, WebsiteConfiguration, MultipartInitiationResponse,
     MultipartCompletionResponse)
+from txaws.s3.tweaks import to_str, to_bytes
 from txaws.service import AWSServiceEndpoint, REGION_US_EAST_1, S3_ENDPOINT
 from txaws.util import XML
 
 
-def to_str(str_or_bytes: AnyStr, encoding: str = "utf-8") -> str:
-    if isinstance(str_or_bytes, str):
-        return str_or_bytes
-    return str_or_bytes.decode(encoding)
-
-
-def to_bytes(str_or_bytes: AnyStr, encoding: str = "utf-8") -> bytes:
-    if isinstance(str_or_bytes, bytes):
-        return str_or_bytes
-    return str_or_bytes.encode(encoding)
-
-# alias
+# aliases
 _t = to_str
 _b = to_bytes
 
