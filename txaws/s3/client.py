@@ -504,7 +504,7 @@ class S3Client(BaseClient):
         """
         details = self._details(
             method=b"GET",
-            url_context=self._url_context(bucket=bucket, object_name=object_name),
+            url_context=self._url_context(bucket=_b(bucket), object_name=_b(object_name)),
         )
         d = self._submit(self._query_factory(details))
         d.addCallback(itemgetter(1))
